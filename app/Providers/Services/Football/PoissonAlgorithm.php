@@ -1,7 +1,6 @@
 <?php
 namespace App\Providers\Services\Football;
 
-
 class TeamNotFound extends \Exception {}
 
 
@@ -82,9 +81,14 @@ class PoissonAlgorithm {
     protected function getTeamStats($team, $option)
     {
         $teamNames = array_column($this->data, 2);
+
         $pos = false;
+        $searchTeam = mb_substr($team, 0, 5);
+        
         foreach($teamNames as $k => $name) {
-            if(substr($name, 0, 5) === substr($team, 0, 5)) {
+            $arrTeam = mb_substr(mb_strtolower($name), 0, 5);
+            
+            if ($arrTeam === $searchTeam) {
                 $pos = $k;
             }
         }
@@ -101,8 +105,8 @@ class PoissonAlgorithm {
         $predictions = [];
         foreach($this->matches as $gameNum => $matches) {
 
-            $homeTeam = $matches[0];
-            $awayTeam = $matches[1];
+            $homeTeam = trim(mb_strtolower($matches[0]));
+            $awayTeam = trim(mb_strtolower($matches[1]));
 
             $teamsHomeGoalsScored = (int) array_sum(array_column($this->data, self::HOME_TEAM_GOALS_FOR));
             $teamsAwayGoalsScored = (int) array_sum(array_column($this->data, self::AWAY_TEAM_GOALS_FOR));
@@ -129,13 +133,15 @@ class PoissonAlgorithm {
             $homeTeamGoalsProbability = (double) number_format($homeTeamAttackStrength * $awayTeamDefenceStrength * $AVG_HOME, 3);
             $awayTeamGoalsProbability = (double) number_format($awayTeamAttackStregnth * $homeTeamDefenceStregnth * $AVG_AWAY, 3);
             foreach (range(0,$this->occurances) as $occ => $v) {
-                $predictions[($gameNum + 1)][$homeTeam][$occ] =  number_format(($this->poisson($homeTeamGoalsProbability, $occ)*100),2) . '%';
-                $predictions[($gameNum + 1)][$awayTeam][$occ] =  number_format(($this->poisson($awayTeamGoalsProbability, $occ)*100),2) . '%';
+                $predictions[($gameNum + 1)][$homeTeam][$occ] =  number_format(($this->poisson($homeTeamGoalsProbability, $occ)*100),2);
+                $predictions[($gameNum + 1)][$awayTeam][$occ] =  number_format(($this->poisson($awayTeamGoalsProbability, $occ)*100),2);
             }
         }
 
-
-        return $this->calculateOdds($predictions);
+        $strategy = new Strategy($predictions, $this->results);
+        //todo
+        dd($strategy->findStrategyByKey('correct.scores')->getResult(), $strategy->findStrategyByKey('correct.scores')->getResult()['0-0']);
+        // return $this->calculateOdds($predictions);
     }
 
     protected function calculatePossibleOutcomes() {
