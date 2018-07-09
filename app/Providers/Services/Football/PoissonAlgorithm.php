@@ -84,7 +84,7 @@ class PoissonAlgorithm {
         $teamNames = array_column($this->data, 2);
         $pos = false;
         foreach($teamNames as $k => $name) {
-            if(substr($name, 0, 5) === substr($team, 0, 5)) {
+            if(substr(strtolower($name), 0, 5) === substr(strtolower($team), 0, 5)) {
                 $pos = $k;
             }
         }
