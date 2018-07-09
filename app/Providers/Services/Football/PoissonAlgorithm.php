@@ -4,6 +4,8 @@ namespace App\Providers\Services\Football;
 
 class TeamNotFound extends \Exception {}
 
+class NoPredictionsWrongFileData extends \Exception {}
+
 
 class PoissonAlgorithm {
 
@@ -157,7 +159,7 @@ class PoissonAlgorithm {
     protected function calculateOdds($predictions)
     {
         if ( !$predictions)
-            return [];
+            throw new NoPredictionsWrongFileData('Please check your file and try again.');
 
 
         $matchesResults = [];

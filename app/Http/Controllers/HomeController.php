@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Providers\Services\Football\NoPredictionsWrongFileData;
 use App\Providers\Services\Football\PoissonAlgorithm;
+use App\Providers\Services\Football\TeamNotFound;
 use Illuminate\Http\Request;
+use Illuminate\Support\MessageBag;
+use Illuminate\Validation\ValidationException;
 
 class HomeController extends Controller
 {
@@ -25,9 +29,9 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $data = [];
-
+        $error = null;
         if ($request->isMethod('post')) {
-            $this->validate($request, ['match' => 'required', 'sheet_url' => 'required', 'occurances' => 'required']);
+            $this->validate($request, ['match.1' => 'required', 'sheet_url' => 'required', 'occurances' => 'required'], ['match.1.required' => 'Enter match game']);
             $matches = $request->input('match');
             $sheetUrl = $request->input('sheet_url');
             $occurances = $request->input('occurances');
@@ -39,10 +43,21 @@ class HomeController extends Controller
                 }
             }
 
-            $poisson = new PoissonAlgorithm($sheetUrl, $games, $occurances);
-            $data = $poisson->generatePredictions();
-            if( !$data) {
-                throw new \Exception('Try again');
+            try {
+                $poisson = new PoissonAlgorithm($sheetUrl, $games, $occurances);
+                $data = $poisson->generatePredictions();
+            } catch (TeamNotFound $tex) {
+                $error = ValidationException::withMessages([
+                    'team_not_found' => [$tex->getMessage()],
+                ]);
+            } catch (NoPredictionsWrongFileData $ex) {
+                $error = ValidationException::withMessages([
+                    'team_not_found' => [$ex->getMessage()],
+                ]);
+            }
+
+            if($error) {
+                throw $error;
             }
         }
 
