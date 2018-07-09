@@ -84,7 +84,7 @@ class PoissonAlgorithm {
         $teamNames = array_column($this->data, 2);
         $pos = false;
         foreach($teamNames as $k => $name) {
-            if(substr(strtolower($name), 0, 5) === substr(strtolower($team), 0, 5)) {
+            if(mb_substr(mb_strtolower($name), 0, 5) === mb_substr(mb_strtolower($team), 0, 5)) {
                 $pos = $k;
             }
         }
@@ -101,8 +101,8 @@ class PoissonAlgorithm {
         $predictions = [];
         foreach($this->matches as $gameNum => $matches) {
 
-            $homeTeam = $matches[0];
-            $awayTeam = $matches[1];
+            $homeTeam = trim(($matches[0]));
+            $awayTeam = trim(($matches[1]));
 
             $teamsHomeGoalsScored = (int) array_sum(array_column($this->data, self::HOME_TEAM_GOALS_FOR));
             $teamsAwayGoalsScored = (int) array_sum(array_column($this->data, self::AWAY_TEAM_GOALS_FOR));
