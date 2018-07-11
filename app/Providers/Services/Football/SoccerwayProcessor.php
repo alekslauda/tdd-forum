@@ -1,33 +1,60 @@
 <?php
 
-namespace App\Http\Controllers;
 
-use App\Providers\Services\Football\NoPredictionsWrongFileData;
-use App\Providers\Services\Football\PoissonAlgorithm;
-use App\Providers\Services\Football\TeamNotFound;
-use duzun\hQuery;
+namespace App\Providers\Services\Football;
 use Goutte\Client;
-use Illuminate\Http\Request;
-use Illuminate\Support\MessageBag;
-use Illuminate\Validation\ValidationException;
 
-class HomeController extends Controller
+class SoccerwayProcessor
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    const HOME_TEAM_GOALS_FOR = 13;
+    const HOME_TEAM_GOALS_AGAINST = 14;
+
+    const AWAY_TEAM_GOALS_FOR = 19;
+    const AWAY_TEAM_GOALS_AGAINST = 20;
+
+    const HOME_TEAM_MATCH_PLAYED = 9;
+    const AWAY_TEAM_MATCH_PLAYED = 15;
+
+    protected $soccerwayCompetitionUrl;
+
+    protected $matches;
+
+    protected $results;
+
+    protected $data;
+
+    protected $occurances;
+
+    protected $client;
+
+    public function __construct($soccerwayCompetitionUrl, $matches, $occurances = 5)
     {
-        $this->middleware('auth');
+        $this->soccerwayCompetitionUrl = $soccerwayCompetitionUrl;
+        $this->matches = $matches;
+        $this->client = new Client();
+        $this->setResults($occurances);
+        $this->buildData();
     }
 
-    public function index()
+    public function getMatches()
     {
-        $client = new Client();
-        $crawler = $client->request('GET', 'https://int.soccerway.com/national/brazil/serie-b/2017/regular-season/r39675/');
+        return $this->matches;
+    }
 
+    public function getResults()
+    {
+        return $this->results;
+    }
+
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    protected function buildData()
+    {
+        $crawler = $this->client->request('GET', $this->soccerwayCompetitionUrl);
+//        $crawler = $client->request('GET', 'https://int.soccerway.com/national/brazil/serie-b/2017/regular-season/r39675/');
         $options = $crawler->filter('#season_id_selector')->children();
         $getPastYear = $options->eq($options->count() + 1 - $options->count())->attr('value');
         $item = explode('/', $getPastYear);
@@ -85,11 +112,48 @@ class HomeController extends Controller
             });
         });
 
-        return $table;
+        if( !$table) {
+            throw new \RuntimeException('No data found.');
+        }
 
+        unset($table[0], $table[1]);
+        $this->data = $table;
     }
 
-    public function extractJSON($string) {
+    protected function setResults() {
+        $res = [];
+        foreach(range(0, $this->occurances) as $k => $v) {
+
+            for($i = 0; $i <= $v; $i++) {
+                $res[] = $i . '-' . $v;
+            }
+
+            for($i = $this->occurances; $i >= $v; $i--) {
+                $res[] = $i . '-' . $v;
+            }
+        }
+
+        $this->results = array_unique($res);
+    }
+
+    protected function getTeamStats($team, $option)
+    {
+        $teamNames = array_column($this->data, 2);
+        $pos = false;
+        foreach($teamNames as $k => $name) {
+            if(mb_substr(mb_strtolower($name), 0, 5) === mb_substr(mb_strtolower($team), 0, 5)) {
+                $pos = $k;
+            }
+        }
+
+        if( $pos === false ) {
+            throw new TeamNotFound('Please provide correct data. Team: ' . $team . ' not found.');
+        }
+
+        return (int) $this->data[$pos][$option];
+    }
+
+    private function extractJSON($string) {
         $pattern = '
         /
         \{              # { character
@@ -115,46 +179,4 @@ class HomeController extends Controller
 
         return $matches[0];
     }
-//    /**
-//     * Show the application dashboard.
-//     *
-//     * @return \Illuminate\Http\Response
-//     */
-//    public function index(Request $request)
-//    {
-//        $data = [];
-//        $error = null;
-//        if ($request->isMethod('post')) {
-//            $this->validate($request, ['match.1' => 'required', 'sheet_url' => 'required', 'occurances' => 'required'], ['match.1.required' => 'Enter match game']);
-//            $matches = $request->input('match');
-//            $sheetUrl = $request->input('sheet_url');
-//            $occurances = $request->input('occurances');
-//            $games = [];
-//            foreach($matches as $match) {
-//                $game = explode('-', $match);
-//                if (count($game) == 2) {
-//                    $games[] = $game;
-//                }
-//            }
-//
-//            try {
-//                $poisson = new PoissonAlgorithm($sheetUrl, $games, $occurances);
-//                $data = $poisson->generatePredictions();
-//            } catch (TeamNotFound $tex) {
-//                $error = ValidationException::withMessages([
-//                    'team_not_found' => [$tex->getMessage()],
-//                ]);
-//            } catch (NoPredictionsWrongFileData $ex) {
-//                $error = ValidationException::withMessages([
-//                    'team_not_found' => [$ex->getMessage()],
-//                ]);
-//            }
-//
-//            if($error) {
-//                throw $error;
-//            }
-//        }
-//
-//        return view('home', ['data' => $data]);
-//    }
 }
