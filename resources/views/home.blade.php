@@ -23,7 +23,7 @@
                 <div class="panel-heading">{{ $match }}</div>
 
                 <div class="panel-body">
-                    <table class="table">
+                    <table border="1" class="table">
                         <tr>
                             <th>Home Win</th>
                             <th>Draw</th>
