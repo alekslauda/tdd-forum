@@ -7,49 +7,12 @@ class TeamNotFound extends \Exception {}
 class NoPredictionsWrongFileData extends \Exception {}
 
 
-class PoissonAlgorithm {
+class PoissonAlgorithmOddsConverter {
 
-    protected $data = [];
+    protected $soccerwayProcessor;
 
-    protected $matches = [];
-
-    protected $occurances;
-
-    protected $results = [];
-
-    protected $spreadsheet_url;
-
-    public function __construct(
-        $spreadsheet_url,
-        $matches,
-        $occurances = 5
-    ) {
-        $this->matches = $matches;
-        $this->occurances = $occurances;
-        $this->spreadsheet_url = $spreadsheet_url;
-        $this->loadData();
-    }
-
-    protected function loadData()
-    {
-        if(!ini_set('default_socket_timeout', 15)) echo "<!-- unable to change socket timeout -->";
-
-        $info = [];
-        if (($handle = fopen($this->spreadsheet_url, "r")) !== FALSE) {
-            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                $info[] = $data;
-            }
-            fclose($handle);
-        }
-        else
-            die("Problem reading csv");
-
-        if( !$info) {
-            throw new \RuntimeException('No data found.');
-        }
-        unset($info[0], $info[1]);
-        $this->data = array_values($info);
-        $this->calculatePossibleOutcomes();
+    public function __construct($soccerwayProcessor) {
+        $this->soccerwayProcessor = $soccerwayProcessor;
     }
 
     protected function factorial($number)
@@ -72,88 +35,46 @@ class PoissonAlgorithm {
         return $a * $b / $c;
     }
 
-    const HOME_TEAM_GOALS_FOR = 13;
-    const HOME_TEAM_GOALS_AGAINST = 14;
-
-    const AWAY_TEAM_GOALS_FOR = 19;
-    const AWAY_TEAM_GOALS_AGAINST = 20;
-
-    const HOME_TEAM_MATCH_PLAYED = 9;
-    const AWAY_TEAM_MATCH_PLAYED = 15;
-
-    protected function getTeamStats($team, $option)
-    {
-        $teamNames = array_column($this->data, 2);
-        $pos = false;
-        foreach($teamNames as $k => $name) {
-            if(mb_substr(mb_strtolower($name), 0, 5) === mb_substr(mb_strtolower($team), 0, 5)) {
-                $pos = $k;
-            }
-        }
-
-        if( $pos === false ) {
-            throw new TeamNotFound('Please provide correct data. Team: ' . $team . ' not found.');
-        }
-
-        return (int) $this->data[$pos][$option];
-    }
 
     public function generatePredictions()
     {
         $predictions = [];
-        foreach($this->matches as $gameNum => $matches) {
+        foreach($this->soccerwayProcessor->getMatches() as $gameNum => $matches) {
 
             $homeTeam = trim(($matches[0]));
             $awayTeam = trim(($matches[1]));
+            $homeTeamTotalGoalsScored = $this->soccerwayProcessor->getTeamStats($homeTeam, SoccerwayProcessor::HOME_TEAM_GOALS_FOR);
+            $homeTeamTotalGamesPlayed = $this->soccerwayProcessor->getTeamStats($homeTeam, SoccerwayProcessor::HOME_TEAM_MATCH_PLAYED);
+            $awayTeamTotalGoalsConceded = $this->soccerwayProcessor->getTeamStats($awayTeam, SoccerwayProcessor::AWAY_TEAM_GOALS_AGAINST);
+            $awayTeamTotalGamesPlayed = $this->soccerwayProcessor->getTeamStats($awayTeam, SoccerwayProcessor::AWAY_TEAM_MATCH_PLAYED);
 
-            $teamsHomeGoalsScored = (int) array_sum(array_column($this->data, self::HOME_TEAM_GOALS_FOR));
-            $teamsAwayGoalsScored = (int) array_sum(array_column($this->data, self::AWAY_TEAM_GOALS_FOR));
-            $teamsTotalGamesPlayed = (int) round(number_format((array_sum(array_column($this->data, 3)) / 2), 1));
+            $teamsHomeGoalsScored = $this->soccerwayProcessor->getTeamGoalsScored(SoccerwayProcessor::HOME_TEAM_GOALS_FOR);
+            $teamsAwayGoalsScored = $this->soccerwayProcessor->getTeamGoalsScored(SoccerwayProcessor::AWAY_TEAM_GOALS_FOR);
+            $teamsTotalGamesPlayed = $this->soccerwayProcessor->getTeamsTotalGamesPlayed();
             $seasonAverageHomeGoals = $teamsHomeGoalsScored / $teamsTotalGamesPlayed;
             $seasonAverageAwayGoalsConceded = $teamsAwayGoalsScored / $teamsTotalGamesPlayed;
+
             $AVG_HOME = $teamsHomeGoalsScored / $teamsTotalGamesPlayed;
             $AVG_AWAY = $teamsAwayGoalsScored / $teamsTotalGamesPlayed;
 
-
-            $homeTeamTotalGoalsScored = $this->getTeamStats($homeTeam, self::HOME_TEAM_GOALS_FOR);
-            $homeTeamTotalGamesPlayed = $this->getTeamStats($homeTeam, self::HOME_TEAM_MATCH_PLAYED);
             $homeTeamAttackStrength = (double) ($homeTeamTotalGoalsScored / $homeTeamTotalGamesPlayed / $seasonAverageHomeGoals);
-            $homeTeamTotalGoalsConceded = $this->getTeamStats($homeTeam, self::HOME_TEAM_GOALS_AGAINST);;
+            $homeTeamTotalGoalsConceded = $this->soccerwayProcessor->getTeamStats($homeTeam, SoccerwayProcessor::HOME_TEAM_GOALS_AGAINST);;
             $homeTeamDefenceStregnth = (double) ($homeTeamTotalGoalsConceded / $homeTeamTotalGamesPlayed / $seasonAverageAwayGoalsConceded);
 
-            $awayTeamTotalGoalsConceded = $this->getTeamStats($awayTeam, self::AWAY_TEAM_GOALS_AGAINST);
-            $awayTeamTotalGamesPlayed = $this->getTeamStats($awayTeam, self::AWAY_TEAM_MATCH_PLAYED);
             $awayTeamDefenceStrength = (double) ($awayTeamTotalGoalsConceded / $awayTeamTotalGamesPlayed / $seasonAverageHomeGoals);
-            $awayTeamTotalGoalsScored = $this->getTeamStats($awayTeam, self::AWAY_TEAM_GOALS_FOR);
+            $awayTeamTotalGoalsScored = $this->soccerwayProcessor->getTeamStats($awayTeam, SoccerwayProcessor::AWAY_TEAM_GOALS_FOR);
             $awayTeamAttackStregnth = ($awayTeamTotalGoalsScored / $awayTeamTotalGamesPlayed / $seasonAverageAwayGoalsConceded);
-
 
             $homeTeamGoalsProbability = (double) number_format($homeTeamAttackStrength * $awayTeamDefenceStrength * $AVG_HOME, 3);
             $awayTeamGoalsProbability = (double) number_format($awayTeamAttackStregnth * $homeTeamDefenceStregnth * $AVG_AWAY, 3);
-            foreach (range(0,$this->occurances) as $occ => $v) {
+
+            foreach (range(0,SoccerwayProcessor::GOAL_OCCURANCES) as $occ => $v) {
                 $predictions[($gameNum + 1)][$homeTeam][$occ] =  number_format(($this->poisson($homeTeamGoalsProbability, $occ)*100),2) . '%';
                 $predictions[($gameNum + 1)][$awayTeam][$occ] =  number_format(($this->poisson($awayTeamGoalsProbability, $occ)*100),2) . '%';
             }
         }
 
-
         return $this->calculateOdds($predictions);
-    }
-
-    protected function calculatePossibleOutcomes() {
-        $res = [];
-        foreach(range(0, $this->occurances) as $k => $v) {
-
-            for($i = 0; $i <= $v; $i++) {
-                $res[] = $i . '-' . $v;
-            }
-
-            for($i = $this->occurances; $i >= $v; $i--) {
-                $res[] = $i . '-' . $v;
-            }
-        }
-
-        $this->results = array_unique($res);
     }
 
     protected function calculateOdds($predictions)
@@ -185,9 +106,11 @@ class PoissonAlgorithm {
         $drawPrediction = 0;
         $over1and5Prediction = 0;
         $over2and5Prediction = 0;
+        $over3and5Prediction = 0;
+        $over4and5Prediction = 0;
         $bothTeamToScorePrediction = 0;
 
-        foreach($this->results as $res) {
+        foreach($this->soccerwayProcessor->getResults() as $res) {
             $results = explode('-', $res);
             $homeTeamRes = (int) $results[0];
             $awayTeamRes = (int) $results[1];
@@ -207,6 +130,16 @@ class PoissonAlgorithm {
             if($homeTeamRes === $awayTeamRes) {
                 $converts = $this->convert($prediction[$homeTeam][$homeTeamRes], $prediction[$awayTeam][$awayTeamRes]);
                 $drawPrediction += $converts[0] * $converts[1];
+            }
+
+            if (($homeTeamRes + $awayTeamRes) > 4.5) {
+                $converts = $this->convert($prediction[$homeTeam][$homeTeamRes], $prediction[$awayTeam][$awayTeamRes]);
+                $over4and5Prediction += $converts[0] * $converts[1];
+            }
+
+            if (($homeTeamRes + $awayTeamRes) > 3.5) {
+                $converts = $this->convert($prediction[$homeTeam][$homeTeamRes], $prediction[$awayTeam][$awayTeamRes]);
+                $over3and5Prediction += $converts[0] * $converts[1];
             }
 
             if (($homeTeamRes + $awayTeamRes) > 2.5) {
@@ -238,6 +171,14 @@ class PoissonAlgorithm {
             'over 2.5' => round((1/$over2and5Prediction), 2) . '(' . round((1/(1/$over2and5Prediction))*100, 2) . '%' . ')',
             'under 2.5' => round(1/((100 - round((1/(1/$over2and5Prediction))*100, 2)) / 100), 2) . '(' . (100 - round((1/(1/$over2and5Prediction))*100, 2)) . '%' . ')',
         ];
+        $overUnder3and5 = [
+            'over 3.5' => round((1/$over3and5Prediction), 2) . '(' . round((1/(1/$over3and5Prediction))*100, 2) . '%' . ')',
+            'under 3.5' => round(1/((100 - round((1/(1/$over3and5Prediction))*100, 2)) / 100), 2) . '(' . (100 - round((1/(1/$over3and5Prediction))*100, 2)) . '%' . ')',
+        ];
+        $overUnder4and5 = [
+            'over 4.5' => round((1/$over4and5Prediction), 2) . '(' . round((1/(1/$over4and5Prediction))*100, 2) . '%' . ')',
+            'under 4.5' => round(1/((100 - round((1/(1/$over4and5Prediction))*100, 2)) / 100), 2) . '(' . (100 - round((1/(1/$over4and5Prediction))*100, 2)) . '%' . ')',
+        ];
 
         $bothTeamToScore = [
             'Yes' => round((1/$bothTeamToScorePrediction), 2) . '(' .round((1/(1/$bothTeamToScorePrediction))*100, 2) . '%' . ')',
@@ -250,6 +191,8 @@ class PoissonAlgorithm {
             'Away Win' => $awayWin,
             'Over/Under 1.5' => $overUnder1and5,
             'Over/Under 2.5' => $overUnder2and5,
+            'Over/Under 3.5' => $overUnder3and5,
+            'Over/Under 4.5' => $overUnder4and5,
             'Both Teams To Score' => $bothTeamToScore,
             'Correct Score' => $correctScore
         ];

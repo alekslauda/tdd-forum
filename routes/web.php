@@ -20,6 +20,19 @@ Auth::routes();
 
 Route::any('home', 'HomeController@index')->name('home');
 
+Route::get('competition-countries', function(){
+    return \App\Providers\Services\Football\CompetitionBuilder::build();
+})->name('competition-countries');
+
+Route::get('competition-build', function(){
+    $parentLink = request()->parentLink;
+    return \App\Providers\Services\Football\CompetitionBuilder::buildCompetitions($parentLink);
+})->name('competition-build');
+
+Route::get('competition-builder', function(){
+    return \App\Providers\Services\Football\CompetitionBuilder::build();
+})->name('competition-builder');
+
 /** @replies */
 Route::post('replies/{reply}/favorites', 'FavoritesController@store');
 

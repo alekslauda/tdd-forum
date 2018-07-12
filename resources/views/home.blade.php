@@ -15,7 +15,7 @@
 
             @if ($data)
             <a href="/home">Recalculate</a>
-            <div class="panel panel-success">
+            <div class="panel panel-success" style="width: 1400px">
                 @foreach($data as $match => $v)
                     <div class="panel-heading">{{ $match }}</div>
 
@@ -27,6 +27,8 @@
                                 <th>Away Win</th>
                                 <th colspan="2">Over/Under 1.5</th>
                                 <th colspan="2">Over/Under 2.5</th>
+                                <th colspan="2">Over/Under 3.5</th>
+                                <th colspan="2">Over/Under 4.5</th>
                                 <th colspan="2">Both Teams To Score</th>
                             </tr>
                             <tr class="more-visible">
@@ -44,6 +46,18 @@
                                 </td>
                                 <td>
                                     {{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5'] }}
+                                </td>
+                                <td>
+                                    {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5'] }}
+                                </td>
+                                <td>
+                                    {{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5'] }}
+                                </td>
+                                <td>
+                                    {{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5'] }}
+                                </td>
+                                <td>
+                                    {{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5'] }}
                                 </td>
                                 <td>
                                     Yes - {{ $v['beatTheBookie']['Both Teams To Score']['Yes'] }}
@@ -75,20 +89,24 @@
                     <div class="form-group">
                         @foreach(range(1, 10) as $input)
                         <label for="match-{{ $input }}">Match {{ $input }}</label>
-                        <input type="text" class="form-control" id="match-{{ $input }}" placeholder="Add match" name="match[{{$input}}]" value="{{ old('match-' . $input) }}">
+                        <input type="text" class="form-control" id="match-{{ $input }}" placeholder="Add match" name="match[{{$input}}]" value="{{ old('match.' . $input) }}">
                         @endforeach
                     </div>
+                    {{--<div class="form-group">--}}
+                        {{--<label for="exampleInputText1">Competition Url(soccerway)</label>--}}
+                        {{--<input type="text" class="form-control" id="exampleInputText1" placeholder="Paste url with statistic" name="soccerway_competition_url" value="{{ old('soccerway_competition_url') }}">--}}
+                    {{--</div>--}}
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Google sheet url(soccerway)</label>
-                        <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Paste url with statistic" name="sheet_url" value="{{ old('sheet_url') }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Occurances</label>
-                        <select class="form-control" id="exampleFormControlSelect1" name="occurances">
-                        @foreach(range(1, 5) as $input)
-                            <option value="{{$input}}" {{ $input == old('occurances') ? "selected=selected" : "" }}>{{ $input }}</option>
-                        @endforeach
+                        <label for="exampleFormControlSelect3">Statistic Interval</label>
+                        <select class="form-control" id="exampleFormControlSelect3" name="past_year">
+                            <option value="0" selected>Current Year</option>
+                            @foreach([1 => 'Past Year', 2 => 'Past Two Years', 3 => 'Past Three Years'] as $yearNum => $text)
+                                <option value="{{$yearNum}}" {{ $yearNum == old('past_year') ? "selected=selected" : "" }}>{{ $text }}</option>
+                            @endforeach
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <a id="loadCountriesWithCompetitions">Load Countries With Competitions</a>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -97,4 +115,8 @@
     </div>
 
 </div>
+@endsection
+@section('appScripts')
+    @parent
+    <script src="{{ mix('/js/views/home/index.js') }}"></script>
 @endsection
