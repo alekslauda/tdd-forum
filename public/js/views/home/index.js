@@ -133,6 +133,25 @@ $(document).ready(function () {
       }
     });
   });
+
+  $('#addFootballMatches').click(function (e) {
+
+    var lastMatch = $('.form-group.match-input').last().clone();
+    var lastName = lastMatch.find('input').attr('name');
+
+    var id = lastName.match(/\[(.*)\]/i)[1];
+    var newId = parseInt(id) + 1;
+
+    lastMatch.find('label').attr('for', 'match-' + newId);
+    lastMatch.find('label').attr('id', 'labelMatch-' + newId);
+
+    lastMatch.find('input').attr('name', 'match[' + newId + ']');
+    lastMatch.find('input').attr('id', 'match-' + newId);
+    lastMatch.find('input').val("");
+    var newMatch = lastMatch;
+
+    newMatch.insertAfter('.form-group.match-input:last');
+  });
 });
 
 /***/ })

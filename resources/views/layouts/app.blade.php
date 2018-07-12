@@ -26,6 +26,10 @@
             background-color: lightgreen;
         }
 
+        td.row-background-color {
+            background-color: lightgreen;
+        }
+
         .loader {
             border: 16px solid #f3f3f3; /* Light grey */
             border-top: 16px solid #3498db; /* Blue */

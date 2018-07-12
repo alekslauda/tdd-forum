@@ -62,4 +62,23 @@ $(document).ready(function(){
       });
   })
 
+    $('#addFootballMatches').click(function(e){
+
+        let lastMatch = $('.form-group.match-input').last().clone();
+        let lastName = lastMatch.find('input').attr('name');
+
+        let id = lastName.match(/\[(.*)\]/i)[1];
+        let newId = parseInt(id)+1;
+
+
+        lastMatch.find('label').attr('for', `match-${newId}`);
+        lastMatch.find('label').attr('id', `labelMatch-${newId}`);
+
+        lastMatch.find('input').attr('name', `match[${newId}]`);
+        lastMatch.find('input').attr('id', `match-${newId}`);
+        lastMatch.find('input').val("");
+        let newMatch = lastMatch;
+
+        newMatch.insertAfter('.form-group.match-input:last');
+    })
 })

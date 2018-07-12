@@ -160,29 +160,68 @@ class PoissonAlgorithmOddsConverter {
 
         }
 
-        $homeWin = round((1/$homeWinPrediction), 2) . '(' . round((1/(1/$homeWinPrediction))*100, 2) . '%' . ')';
-        $draw = round((1/$drawPrediction), 2) . '(' . round((1/(1/$drawPrediction))*100, 2) . '%' . ')';
-        $awayWin = round((1/$awayWinPrediction), 2) . '(' . round((1/(1/$awayWinPrediction))*100, 2) . '%' . ')';
+        $homeWin = [
+            'odds' => round((1/$homeWinPrediction), 2),
+            'percentage' =>round((1/(1/$homeWinPrediction))*100, 2)
+        ];
+        $draw = [
+            'odds' => round((1/$drawPrediction), 2),
+            'percentage' =>round((1/(1/$drawPrediction))*100, 2)
+        ];
+        $awayWin = [
+            'odds' => round((1/$awayWinPrediction), 2),
+            'percentage' =>round((1/(1/$awayWinPrediction))*100, 2)
+        ];
         $overUnder1and5 = [
-            'over 1.5' => round((1/$over1and5Prediction), 2) . '(' . round((1/(1/$over1and5Prediction))*100, 2) . '%' . ')',
-            'under 1.5' => round(1/((100 - round((1/(1/$over1and5Prediction))*100, 2)) / 100), 2) . '(' . (100 - round((1/(1/$over1and5Prediction))*100, 2)) . '%' . ')',
+            'over 1.5' => [
+                'odds' => round((1/$over1and5Prediction), 2),
+                'percentage' => round((1/(1/$over1and5Prediction))*100, 2)
+            ],
+            'under 1.5' => [
+                'odds' => round(1/((100 - round((1/(1/$over1and5Prediction))*100, 2)) / 100), 2),
+                'percentage' => (100 - round((1/(1/$over1and5Prediction))*100, 2)),
+            ],
         ];
         $overUnder2and5 = [
-            'over 2.5' => round((1/$over2and5Prediction), 2) . '(' . round((1/(1/$over2and5Prediction))*100, 2) . '%' . ')',
-            'under 2.5' => round(1/((100 - round((1/(1/$over2and5Prediction))*100, 2)) / 100), 2) . '(' . (100 - round((1/(1/$over2and5Prediction))*100, 2)) . '%' . ')',
+            'over 2.5' => [
+                'odds' => round((1/$over2and5Prediction), 2),
+                'percentage' => round((1/(1/$over2and5Prediction))*100, 2)
+            ],
+            'under 2.5' => [
+                'odds' => round(1/((100 - round((1/(1/$over2and5Prediction))*100, 2)) / 100), 2),
+                'percentage' => (100 - round((1/(1/$over2and5Prediction))*100, 2)),
+            ],
         ];
         $overUnder3and5 = [
-            'over 3.5' => round((1/$over3and5Prediction), 2) . '(' . round((1/(1/$over3and5Prediction))*100, 2) . '%' . ')',
-            'under 3.5' => round(1/((100 - round((1/(1/$over3and5Prediction))*100, 2)) / 100), 2) . '(' . (100 - round((1/(1/$over3and5Prediction))*100, 2)) . '%' . ')',
+            'over 3.5' => [
+                'odds' => round((1/$over3and5Prediction), 2),
+                'percentage' => round((1/(1/$over3and5Prediction))*100, 2)
+            ],
+            'under 3.5' => [
+                'odds' => round(1/((100 - round((1/(1/$over3and5Prediction))*100, 2)) / 100), 2),
+                'percentage' => (100 - round((1/(1/$over3and5Prediction))*100, 2)),
+            ],
         ];
         $overUnder4and5 = [
-            'over 4.5' => round((1/$over4and5Prediction), 2) . '(' . round((1/(1/$over4and5Prediction))*100, 2) . '%' . ')',
-            'under 4.5' => round(1/((100 - round((1/(1/$over4and5Prediction))*100, 2)) / 100), 2) . '(' . (100 - round((1/(1/$over4and5Prediction))*100, 2)) . '%' . ')',
+            'over 4.5' => [
+                'odds' => round((1/$over4and5Prediction), 2),
+                'percentage' => round((1/(1/$over4and5Prediction))*100, 2)
+            ],
+            'under 4.5' => [
+                'odds' => round(1/((100 - round((1/(1/$over4and5Prediction))*100, 2)) / 100), 2),
+                'percentage' => (100 - round((1/(1/$over4and5Prediction))*100, 2)),
+            ],
         ];
 
         $bothTeamToScore = [
-            'Yes' => round((1/$bothTeamToScorePrediction), 2) . '(' .round((1/(1/$bothTeamToScorePrediction))*100, 2) . '%' . ')',
-            'No' => round(1/((100 - round((1/(1/$bothTeamToScorePrediction))*100, 2)) / 100), 2) . '(' . (100 - round((1/(1/$bothTeamToScorePrediction))*100, 2)) . '%' . ')'
+            'Yes' => [
+                'odds' => round((1/$bothTeamToScorePrediction), 2),
+                'percentage' => round((1/(1/$bothTeamToScorePrediction))*100, 2)
+            ],
+            'No' => [
+                'odds' => round(1/((100 - round((1/(1/$bothTeamToScorePrediction))*100, 2)) / 100), 2),
+                'percentage' => (100 - round((1/(1/$bothTeamToScorePrediction))*100, 2))
+            ]
         ];
 
         return [

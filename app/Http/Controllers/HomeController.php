@@ -32,13 +32,13 @@ class HomeController extends Controller
         if ($request->isMethod('post')) {
             $this->validate($request, [
                 'match.1' => 'required',
-                'soccerway_competition_url' => 'required',
                 'past_year' => 'required',
+                'competitions' => 'required'
             ], [
                 'match.1.required' => 'Enter match game'
             ]);
             $matches = $request->input('match');
-            $competitionUrl = $request->input('soccerway_competition_url');
+            $competitionUrl = $request->input('competitions');
             $pastYear = $request->input('past_year');
             $games = [];
             foreach($matches as $match) {
