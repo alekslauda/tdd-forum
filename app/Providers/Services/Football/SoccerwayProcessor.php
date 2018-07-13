@@ -25,15 +25,13 @@ class SoccerwayProcessor
 
     protected $data;
 
-    protected $pastYear;
 
     protected $client;
 
-    public function __construct($soccerwayCompetitionUrl, $matches, $pastYear = 1)
+    public function __construct($soccerwayCompetitionUrl, $matches)
     {
         $this->soccerwayCompetitionUrl = $soccerwayCompetitionUrl;
         $this->matches = $matches;
-        $this->pastYear = $pastYear;
         $this->client = new Client();
         $this->setResults();
         $this->buildData();
@@ -85,7 +83,7 @@ class SoccerwayProcessor
     {
         $crawler = $this->client->request('GET', \Config::get('app.SOCCERWAY_URL') . $this->soccerwayCompetitionUrl);
         $options = $crawler->filter('#season_id_selector')->children();
-        $getPastYearLink = $options->eq($options->count() + $this->pastYear - $options->count())->attr('value');
+        $getPastYearLink = $options->eq($options->count() + 1 - $options->count())->attr('value');
         $item = explode('/', $getPastYearLink);
         $season_id = (int) str_replace('s', '', $item[count($item) - 2]);
         $queryParams = [

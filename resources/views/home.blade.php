@@ -99,15 +99,6 @@
                 <div class="form-group">
                     <a id="loadCountriesWithCompetitions">Load Countries With Competitions</a>
                 </div>
-                <div class="form-group">
-                    <label for="exampleFormControlSelect3">Statistic Interval</label>
-                    <select class="form-control" id="exampleFormControlSelect3" name="past_year">
-                        <option value="0" selected>Current Year</option>
-                        @foreach([1 => 'Past Year', 2 => 'Past Two Years', 3 => 'Past Three Years'] as $yearNum => $text)
-                            <option value="{{$yearNum}}" {{ $yearNum == old('past_year') ? "selected=selected" : "" }}>{{ $text }}</option>
-                        @endforeach
-                    </select>
-                </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         @endif

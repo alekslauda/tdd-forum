@@ -32,14 +32,12 @@ class HomeController extends Controller
         if ($request->isMethod('post')) {
             $this->validate($request, [
                 'match.1' => 'required',
-                'past_year' => 'required',
                 'competitions' => 'required'
             ], [
                 'match.1.required' => 'Enter match game'
             ]);
             $matches = $request->input('match');
             $competitionUrl = $request->input('competitions');
-            $pastYear = $request->input('past_year');
             $games = [];
             foreach($matches as $match) {
                 $game = explode('-', $match);
@@ -49,7 +47,7 @@ class HomeController extends Controller
             }
 
             try {
-                $soccerwayProcessor = new SoccerwayProcessor($competitionUrl, $games, $pastYear);
+                $soccerwayProcessor = new SoccerwayProcessor($competitionUrl, $games);
                 $poisson = new PoissonAlgorithmOddsConverter($soccerwayProcessor);
                 $data = $poisson->generatePredictions();
             } catch (TeamNotFound $tex) {
@@ -61,7 +59,7 @@ class HomeController extends Controller
                     'team_not_found' => [$ex->getMessage()],
                 ]);
             } catch (\ErrorException $e) {
-                \Log::error('System error: '. $e->getMessage());
+                \Log::error('System error: '. $e->getMessage() . ' | Trace: ' . $e->getTraceAsString());
                 $error = ValidationException::withMessages([
                     'system_error' => ['Something went wrong. Please try again later'],
                 ]);
