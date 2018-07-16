@@ -11,6 +11,8 @@ class PoissonAlgorithmOddsConverter {
 
     protected $soccerwayProcessor;
 
+    const BET_AMOUNT = 50;
+
     public function __construct($soccerwayProcessor) {
         $this->soccerwayProcessor = $soccerwayProcessor;
     }
@@ -35,6 +37,13 @@ class PoissonAlgorithmOddsConverter {
         return $a * $b / $c;
     }
 
+    public function findValueBet($winInOdds, $winChancePercentage, $lossChancePercentage)
+    {
+        $winChance = round($winChancePercentage/100, 2);
+        $lossChance = round($lossChancePercentage/100, 2);
+        $amountWonPerBet = (self::BET_AMOUNT * $winInOdds) - self::BET_AMOUNT;
+        return ($amountWonPerBet * $winChance) - (self::BET_AMOUNT * $lossChance);
+    }
 
     public function generatePredictions()
     {

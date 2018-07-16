@@ -86,6 +86,7 @@
                 </div>
             @endforeach
         </div>
+        <pre>{{ print_r($valueBets, true) }}</pre>
         @else
             <form action="" method="POST">
                 {{ csrf_field() }}
