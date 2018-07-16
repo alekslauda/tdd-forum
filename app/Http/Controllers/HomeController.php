@@ -51,6 +51,7 @@ class HomeController extends Controller
                 $poisson = new PoissonAlgorithmOddsConverter($soccerwayProcessor);
                 $data = $poisson->generatePredictions();
             } catch (TeamNotFound $tex) {
+                \Log::error('System error: '. $tex->getMessage() . ' | Trace: ' . $tex->getTraceAsString());
                 $error = ValidationException::withMessages([
                     'team_not_found' => [$tex->getMessage()],
                 ]);

@@ -43,15 +43,20 @@ class PoissonAlgorithmOddsConverter {
 
             $homeTeam = trim(($matches[0]));
             $awayTeam = trim(($matches[1]));
-            $homeTeamTotalGoalsScored = $this->soccerwayProcessor->getTeamStats($homeTeam, SoccerwayProcessor::HOME_TEAM_GOALS_FOR);
-            $homeTeamTotalGamesPlayed = $this->soccerwayProcessor->getTeamStats($homeTeam, SoccerwayProcessor::HOME_TEAM_MATCH_PLAYED);
-            $homeTeamTotalGoalsConceded = $this->soccerwayProcessor->getTeamStats($homeTeam, SoccerwayProcessor::HOME_TEAM_GOALS_AGAINST);;
-            $awayTeamTotalGoalsConceded = $this->soccerwayProcessor->getTeamStats($awayTeam, SoccerwayProcessor::AWAY_TEAM_GOALS_AGAINST);
-            $awayTeamTotalGamesPlayed = $this->soccerwayProcessor->getTeamStats($awayTeam, SoccerwayProcessor::AWAY_TEAM_MATCH_PLAYED);
-            $awayTeamTotalGoalsScored = $this->soccerwayProcessor->getTeamStats($awayTeam, SoccerwayProcessor::AWAY_TEAM_GOALS_FOR);
+            try {
+                $homeTeamTotalGoalsScored = $this->soccerwayProcessor->getTeamStats($homeTeam, SoccerwayProcessor::HOME_TEAM_GOALS_FOR);
+                $homeTeamTotalGamesPlayed = $this->soccerwayProcessor->getTeamStats($homeTeam, SoccerwayProcessor::HOME_TEAM_MATCH_PLAYED);
+                $homeTeamTotalGoalsConceded = $this->soccerwayProcessor->getTeamStats($homeTeam, SoccerwayProcessor::HOME_TEAM_GOALS_AGAINST);;
+                $awayTeamTotalGoalsConceded = $this->soccerwayProcessor->getTeamStats($awayTeam, SoccerwayProcessor::AWAY_TEAM_GOALS_AGAINST);
+                $awayTeamTotalGamesPlayed = $this->soccerwayProcessor->getTeamStats($awayTeam, SoccerwayProcessor::AWAY_TEAM_MATCH_PLAYED);
+                $awayTeamTotalGoalsScored = $this->soccerwayProcessor->getTeamStats($awayTeam, SoccerwayProcessor::AWAY_TEAM_GOALS_FOR);
 
-            $teamsHomeGoalsScored = $this->soccerwayProcessor->getTeamGoalsScored(SoccerwayProcessor::HOME_TEAM_GOALS_FOR);
-            $teamsAwayGoalsScored = $this->soccerwayProcessor->getTeamGoalsScored(SoccerwayProcessor::AWAY_TEAM_GOALS_FOR);
+                $teamsHomeGoalsScored = $this->soccerwayProcessor->getTeamGoalsScored(SoccerwayProcessor::HOME_TEAM_GOALS_FOR);
+                $teamsAwayGoalsScored = $this->soccerwayProcessor->getTeamGoalsScored(SoccerwayProcessor::AWAY_TEAM_GOALS_FOR);
+            } catch (\Exception $ex) {
+                continue;
+            }
+
             $teamsTotalGamesPlayed = $this->soccerwayProcessor->getTeamsTotalGamesPlayed();
 
             $seasonAverageHomeGoals = $teamsHomeGoalsScored / $teamsTotalGamesPlayed;
@@ -81,7 +86,7 @@ class PoissonAlgorithmOddsConverter {
     protected function calculateOdds($predictions)
     {
         if ( !$predictions)
-            throw new NoPredictionsWrongFileData('Please check your file and try again.');
+            throw new NoPredictionsWrongFileData('No data. No predictions');
 
 
         $matchesResults = [];
