@@ -25,6 +25,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $data = [];
+        $possibleValueBetting = [];
         $error = null;
 
         if ($request->isMethod('post')) {
@@ -67,7 +68,7 @@ class HomeController extends Controller
                 ]);
             }
 
-            $possibleValueBetting = [];
+
 
             foreach($data as $k =>$v) {
 
