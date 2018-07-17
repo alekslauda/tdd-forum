@@ -83,10 +83,10 @@
                            </tr>
                         @endforeach
                     </table>
+                    <pre>{{ print_r($v['valueBets'], true) }}</pre>
                 </div>
             @endforeach
         </div>
-        <pre>{{ print_r($valueBets, true) }}</pre>
         @else
             <form action="" method="POST">
                 {{ csrf_field() }}

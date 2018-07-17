@@ -25,7 +25,6 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $data = [];
-        $possibleValueBetting = [];
         $error = null;
 
         if ($request->isMethod('post')) {
@@ -49,9 +48,6 @@ class HomeController extends Controller
                 $soccerwayProcessor = new SoccerwayProcessor($competitionUrl, $games);
                 $poisson = new PoissonAlgorithmOddsConverter($soccerwayProcessor);
                 $data = $poisson->generatePredictions();
-
-
-
             } catch (TeamNotFound $tex) {
                 \Log::error('System error: '. $tex->getMessage() . ' | Trace: ' . $tex->getTraceAsString());
                 $error = ValidationException::withMessages([
@@ -68,82 +64,11 @@ class HomeController extends Controller
                 ]);
             }
 
-
-
-            foreach($data as $k =>$v) {
-
-                $possibleValueBetting[$k]['Sign'] = [
-                    'Home Win' => $poisson->findValueBet(
-                        $v['beatTheBookie']['Home Win']['odds'],
-                        $v['beatTheBookie']['Home Win']['percentage'],
-                        $v['beatTheBookie']['Away Win']['percentage'] + $v['beatTheBookie']['Draw']['percentage']
-                    ),
-                    'Draw' => $poisson->findValueBet(
-                        $v['beatTheBookie']['Draw']['odds'],
-                        $v['beatTheBookie']['Draw']['percentage'],
-                        $v['beatTheBookie']['Home Win']['percentage'] + $v['beatTheBookie']['Away Win']['percentage']
-                    ),
-                    'Away Win' =>$poisson->findValueBet(
-                        $v['beatTheBookie']['Away Win']['odds'],
-                        $v['beatTheBookie']['Away Win']['percentage'],
-                        $v['beatTheBookie']['Home Win']['percentage'] + $v['beatTheBookie']['Draw']['percentage']
-                    )
-                ];
-
-                $possibleValueBetting[$k]['Goals']['Over 1.5'] = $poisson->findValueBet(
-                    $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['odds'],
-                    $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage'],
-                    $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage']
-                );
-
-                $possibleValueBetting[$k]['Goals']['Over 2.5'] = $poisson->findValueBet(
-                    $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['odds'],
-                    $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage'],
-                    $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage']
-                );
-
-                $possibleValueBetting[$k]['Goals']['Under 1.5'] = $poisson->findValueBet(
-                    $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['odds'],
-                    $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage'],
-                    $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage']
-                );
-
-                $possibleValueBetting[$k]['Goals']['Under 2.5'] = $poisson->findValueBet(
-                    $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['odds'],
-                    $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage'],
-                    $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage']
-                );
-
-                $possibleValueBetting[$k]['Goals']['Over 1.5'] = $poisson->findValueBet(
-                    $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['odds'],
-                    $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage'],
-                    $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage']
-                );
-
-                $possibleValueBetting[$k]['Goals']['Over 2.5'] = $poisson->findValueBet(
-                    $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['odds'],
-                    $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage'],
-                    $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage']
-                );
-
-                $possibleValueBetting[$k]['Both Teams To Score']['yes'] = $poisson->findValueBet(
-                    $v['beatTheBookie']['Both Teams To Score']['Yes']['odds'],
-                    $v['beatTheBookie']['Both Teams To Score']['Yes']['percentage'],
-                    $v['beatTheBookie']['Both Teams To Score']['No']['percentage']
-                );
-
-                $possibleValueBetting[$k]['Both Teams To Score']['no'] = $poisson->findValueBet(
-                    $v['beatTheBookie']['Both Teams To Score']['No']['odds'],
-                    $v['beatTheBookie']['Both Teams To Score']['No']['percentage'],
-                    $v['beatTheBookie']['Both Teams To Score']['Yes']['percentage']
-                );
-            }
-
             if($error) {
                 throw $error;
             }
         }
 
-        return view('home', ['data' => $data, 'valueBets' => $possibleValueBetting]);
+        return view('home', ['data' => $data]);
     }
 }
