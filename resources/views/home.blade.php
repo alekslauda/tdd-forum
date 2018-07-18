@@ -75,6 +75,22 @@
                         </tr>
                     </table>
                 </div>
+               <div class="panel" id="valueBetCalculatorContainer">
+                   <div class="panel-heading">Calculate Value Bet</div>
+                   <div class="panel-body">
+                       <form action="" method="POST">
+                           <div class="form-group match-input">
+                               <label class="match-input-label" id="labelMatch-1" for="match-1">Add Bookamer Odds</label>
+                               <input type="text" class="form-control" id="odds" placeholder="Odds">
+                           </div>
+                           <div class="form-group match-input">
+                               <label class="match-input-label" id="labelMatch-1" for="match-1">Add Win Probability</label>
+                               <input type="text" class="form-control" id="probability" placeholder="Probability %">
+                           </div>
+                       </form>
+                       <button type="submit" class="btn btn-primary" id="calculateValueBets">Calculate</button>
+                   </div>
+               </div>
                 <div class="panel-body">
                     <table class="table">
                         <tr>

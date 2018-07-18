@@ -11,7 +11,7 @@ class PoissonAlgorithmOddsConverter {
 
     protected $soccerwayProcessor;
 
-    const BET_AMOUNT = 50;
+    const BET_AMOUNT = 10;
 
     public function __construct($soccerwayProcessor) {
         $this->soccerwayProcessor = $soccerwayProcessor;

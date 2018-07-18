@@ -152,6 +152,18 @@ $(document).ready(function () {
 
     newMatch.insertAfter('.form-group.match-input:last');
   });
+
+  $('#calculateValueBets').click(function (e) {
+    e.preventDefault();
+    var form = $('#valueBetCalculatorContainer').find('form');
+    if (!form.hasClass('hidden')) {
+      form.addClass('hidden');
+      $('#valueBetCalculatorContainer .panel-heading').text('Value bet');
+    } else {
+      form.removeClass('hidden');
+      $('#valueBetCalculatorContainer .panel-heading').text('Calculate Value Bet');
+    }
+  });
 });
 
 /***/ })
