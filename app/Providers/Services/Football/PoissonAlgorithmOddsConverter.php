@@ -84,8 +84,8 @@ class PoissonAlgorithmOddsConverter {
             $awayTeamGoalsProbability = (double) number_format($awayTeamAttackStregnth * $homeTeamDefenceStregnth * $AVG_AWAY, 3);
 
             foreach (range(0,SoccerwayProcessor::GOAL_OCCURANCES) as $occ => $v) {
-                $predictions[($gameNum + 1)][$homeTeam][$occ] =  number_format(($this->poisson($homeTeamGoalsProbability, $occ)*100),2) . '%';
-                $predictions[($gameNum + 1)][$awayTeam][$occ] =  number_format(($this->poisson($awayTeamGoalsProbability, $occ)*100),2) . '%';
+                $predictions[($gameNum + 1)][$homeTeam][$occ] =  number_format(($this->poisson($homeTeamGoalsProbability, $occ)*100),2);
+                $predictions[($gameNum + 1)][$awayTeam][$occ] =  number_format(($this->poisson($awayTeamGoalsProbability, $occ)*100),2);
             }
         }
 
@@ -99,80 +99,13 @@ class PoissonAlgorithmOddsConverter {
 
 
         $matchesResults = [];
-        $possibleValueBetting = [];
 
         foreach ($predictions as $gameNum => $prediction) {
             $homeTeam = array_keys($prediction)[0];
             $awayTeam = array_keys($prediction)[1];
             $match = $homeTeam . ' - ' . $awayTeam;
             $results = $this->prediction($prediction, $homeTeam, $awayTeam);
-
-            $possibleValueBetting = [
-                'Sign' => [
-                    'Home Win' => $this->findValueBet(
-                        $results['Home Win']['odds'],
-                        $results['Home Win']['percentage'],
-                        $results['Away Win']['percentage'] + $results['Draw']['percentage']
-                    ),
-                    'Draw' => $this->findValueBet(
-                        $results['Draw']['odds'],
-                        $results['Draw']['percentage'],
-                        $results['Home Win']['percentage'] + $results['Away Win']['percentage']
-                    ),
-                    'Away Win' =>$this->findValueBet(
-                        $results['Away Win']['odds'],
-                        $results['Away Win']['percentage'],
-                        $results['Home Win']['percentage'] + $results['Draw']['percentage']
-                    )
-                ],
-            ];
-            $possibleValueBetting['Goals']['Over 1.5'] = $this->findValueBet(
-                $results['Over/Under 1.5']['over 1.5']['odds'],
-                $results['Over/Under 1.5']['over 1.5']['percentage'],
-                $results['Over/Under 1.5']['under 1.5']['percentage']
-            );
-
-            $possibleValueBetting['Goals']['Over 2.5'] = $this->findValueBet(
-                $results['Over/Under 2.5']['over 2.5']['odds'],
-                $results['Over/Under 2.5']['over 2.5']['percentage'],
-                $results['Over/Under 2.5']['under 2.5']['percentage']
-            );
-
-            $possibleValueBetting['Goals']['Under 1.5'] = $this->findValueBet(
-                $results['Over/Under 1.5']['under 1.5']['odds'],
-                $results['Over/Under 1.5']['under 1.5']['percentage'],
-                $results['Over/Under 1.5']['over 1.5']['percentage']
-            );
-
-            $possibleValueBetting['Goals']['Under 2.5'] = $this->findValueBet(
-                $results['Over/Under 2.5']['under 2.5']['odds'],
-                $results['Over/Under 2.5']['under 2.5']['percentage'],
-                $results['Over/Under 2.5']['over 2.5']['percentage']
-            );
-
-            $possibleValueBetting['Goals']['Over 1.5'] = $this->findValueBet(
-                $results['Over/Under 1.5']['over 1.5']['odds'],
-                $results['Over/Under 1.5']['over 1.5']['percentage'],
-                $results['Over/Under 1.5']['under 1.5']['percentage']
-            );
-
-            $possibleValueBetting['Goals']['Over 2.5'] = $this->findValueBet(
-                $results['Over/Under 2.5']['over 2.5']['odds'],
-                $results['Over/Under 2.5']['over 2.5']['percentage'],
-                $results['Over/Under 2.5']['under 2.5']['percentage']
-            );
-
-            $possibleValueBetting['Both Teams To Score']['Yes'] = $this->findValueBet(
-                $results['Both Teams To Score']['Yes']['odds'],
-                $results['Both Teams To Score']['Yes']['percentage'],
-                $results['Both Teams To Score']['No']['percentage']
-            );
-
-            $possibleValueBetting['Both Teams To Score']['No'] = $this->findValueBet(
-                $results['Both Teams To Score']['No']['odds'],
-                $results['Both Teams To Score']['No']['percentage'],
-                $results['Both Teams To Score']['Yes']['percentage']
-            );
+            $possibleValueBetting = $this->calculateValueBets($results);
 
             $matchesResults[$match] = [
                 'beatTheBookie' => $results,
@@ -182,6 +115,94 @@ class PoissonAlgorithmOddsConverter {
 
         }
         return $matchesResults;
+    }
+
+    protected function calculateValueBets($results)
+    {
+        if (! $results) {
+            return [];
+        }
+
+        $possibleValueBetting = [
+            'Sign' => [
+                'Home Win' => $this->findValueBet(
+                    $results['Home Win']['odds'],
+                    $results['Home Win']['percentage'],
+                    $results['Away Win']['percentage'] + $results['Draw']['percentage']
+                ),
+                'Draw' => $this->findValueBet(
+                    $results['Draw']['odds'],
+                    $results['Draw']['percentage'],
+                    $results['Home Win']['percentage'] + $results['Away Win']['percentage']
+                ),
+                'Away Win' =>$this->findValueBet(
+                    $results['Away Win']['odds'],
+                    $results['Away Win']['percentage'],
+                    $results['Home Win']['percentage'] + $results['Draw']['percentage']
+                )
+            ],
+        ];
+        $possibleValueBetting['Goals']['Over 1.5'] = $this->findValueBet(
+            $results['Over/Under 1.5']['over 1.5']['odds'],
+            $results['Over/Under 1.5']['over 1.5']['percentage'],
+            $results['Over/Under 1.5']['under 1.5']['percentage']
+        );
+
+        $possibleValueBetting['Goals']['Over 2.5'] = $this->findValueBet(
+            $results['Over/Under 2.5']['over 2.5']['odds'],
+            $results['Over/Under 2.5']['over 2.5']['percentage'],
+            $results['Over/Under 2.5']['under 2.5']['percentage']
+        );
+
+        $possibleValueBetting['Goals']['Over 3.5'] = $this->findValueBet(
+            $results['Over/Under 3.5']['over 3.5']['odds'],
+            $results['Over/Under 3.5']['over 3.5']['percentage'],
+            $results['Over/Under 3.5']['under 3.5']['percentage']
+        );
+
+        $possibleValueBetting['Goals']['Over 4.5'] = $this->findValueBet(
+            $results['Over/Under 4.5']['over 4.5']['odds'],
+            $results['Over/Under 4.5']['over 4.5']['percentage'],
+            $results['Over/Under 4.5']['under 4.5']['percentage']
+        );
+
+        $possibleValueBetting['Goals']['Under 1.5'] = $this->findValueBet(
+            $results['Over/Under 1.5']['under 1.5']['odds'],
+            $results['Over/Under 1.5']['under 1.5']['percentage'],
+            $results['Over/Under 1.5']['over 1.5']['percentage']
+        );
+
+        $possibleValueBetting['Goals']['Under 2.5'] = $this->findValueBet(
+            $results['Over/Under 2.5']['under 2.5']['odds'],
+            $results['Over/Under 2.5']['under 2.5']['percentage'],
+            $results['Over/Under 2.5']['over 2.5']['percentage']
+        );
+
+        $possibleValueBetting['Goals']['Under 3.5'] = $this->findValueBet(
+            $results['Over/Under 3.5']['under 3.5']['odds'],
+            $results['Over/Under 3.5']['under 3.5']['percentage'],
+            $results['Over/Under 3.5']['over 3.5']['percentage']
+        );
+
+        $possibleValueBetting['Goals']['Under 4.5'] = $this->findValueBet(
+            $results['Over/Under 4.5']['under 4.5']['odds'],
+            $results['Over/Under 4.5']['under 4.5']['percentage'],
+            $results['Over/Under 4.5']['over 4.5']['percentage']
+        );
+
+        $possibleValueBetting['Both Teams To Score']['Yes'] = $this->findValueBet(
+            $results['Both Teams To Score']['Yes']['odds'],
+            $results['Both Teams To Score']['Yes']['percentage'],
+            $results['Both Teams To Score']['No']['percentage']
+        );
+
+        $possibleValueBetting['Both Teams To Score']['No'] = $this->findValueBet(
+            $results['Both Teams To Score']['No']['odds'],
+            $results['Both Teams To Score']['No']['percentage'],
+            $results['Both Teams To Score']['Yes']['percentage']
+        );
+
+        return $possibleValueBetting;
     }
 
     protected function prediction($prediction, $homeTeam, $awayTeam)
@@ -330,15 +351,14 @@ class PoissonAlgorithmOddsConverter {
         $fixtureCalc = $fixtures[0] * $fixtures[1];
         $probability = round((1/(1/$fixtureCalc))*100, 2);
         return [
-            'stats' => round((1 / ($fixtureCalc)), 2). '(' . $probability . '%' . ')',
+            'odds' => round((1 / ($fixtureCalc)), 2),
+            'percentage' => $probability,
             'flagged' => $probability > 10,
         ];
     }
 
     protected function convert($f1, $f2)
     {
-        $fix1 = (double) str_replace('%', '', $f1);
-        $fix2 = (double) str_replace('%', '', $f2);
-        return [$fix1/100, $fix2/100];
+        return [$f1/100, $f2/100];
     }
 }

@@ -35,37 +35,37 @@
                             <th colspan="2">Both Teams To Score</th>
                         </tr>
                         <tr class="more-visible">
-                            <td {{ ($v['beatTheBookie']['Home Win']['percentage'] > 70) ? "class=row-background-color" : '' }}>{{ $v['beatTheBookie']['Home Win']['odds'] }}/({{ $v['beatTheBookie']['Home Win']['percentage'] }}%)</td>
-                            <td {{ ($v['beatTheBookie']['Draw']['percentage'] > 70) ? "class=row-background-color" : '' }}>{{ $v['beatTheBookie']['Draw']['odds'] }}/({{ $v['beatTheBookie']['Draw']['percentage'] }}%)</td>
-                            <td {{ ($v['beatTheBookie']['Away Win']['percentage'] > 70) ? "class=row-background-color" : '' }}>{{ $v['beatTheBookie']['Away Win']['odds'] }}/({{ $v['beatTheBookie']['Away Win']['percentage'] }}%)</td>
-                            <td {{ ($v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage'] > 70) ? "class=row-background-color" : '' }}>
+                            <td {{ ($v['beatTheBookie']['Home Win']['percentage'] > 60) ? "class=row-background-color" : '' }}>{{ $v['beatTheBookie']['Home Win']['odds'] }}/({{ $v['beatTheBookie']['Home Win']['percentage'] }}%)</td>
+                            <td {{ ($v['beatTheBookie']['Draw']['percentage'] > 60) ? "class=row-background-color" : '' }}>{{ $v['beatTheBookie']['Draw']['odds'] }}/({{ $v['beatTheBookie']['Draw']['percentage'] }}%)</td>
+                            <td {{ ($v['beatTheBookie']['Away Win']['percentage'] > 60) ? "class=row-background-color" : '' }}>{{ $v['beatTheBookie']['Away Win']['odds'] }}/({{ $v['beatTheBookie']['Away Win']['percentage'] }}%)</td>
+                            <td {{ ($v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage'] > 60) ? "class=row-background-color" : '' }}>
                                 {{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage'] }}%)
                             </td>
-                            <td {{ ($v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage'] > 70) ? "class=row-background-color" : '' }}>
+                            <td {{ ($v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage'] > 60) ? "class=row-background-color" : '' }}>
                                 {{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage'] }}%)
                             </td>
-                            <td {{ ($v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage'] > 70) ? "class=row-background-color" : '' }}>
+                            <td {{ ($v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage'] > 60) ? "class=row-background-color" : '' }}>
                                 {{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage'] }}%)
                             </td>
-                            <td {{ ($v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage'] > 70) ? "class=row-background-color" : '' }}>
+                            <td {{ ($v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage'] > 60) ? "class=row-background-color" : '' }}>
                                 {{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage'] }}%)
                             </td>
-                            <td {{ ($v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'] > 70) ? "class=row-background-color" : '' }}>
+                            <td {{ ($v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'] > 60) ? "class=row-background-color" : '' }}>
                                 {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'] }}%)
                             </td>
-                            <td {{ ($v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage'] > 70) ? "class=row-background-color" : '' }}>
+                            <td {{ ($v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage'] > 60) ? "class=row-background-color" : '' }}>
                                 {{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage'] }}%)
                             </td>
-                            <td {{ ($v['beatTheBookie']['Over/Under 4.5']['over 4.5']['percentage'] > 70) ? "class=row-background-color" : '' }}>
+                            <td {{ ($v['beatTheBookie']['Over/Under 4.5']['over 4.5']['percentage'] > 60) ? "class=row-background-color" : '' }}>
                                 {{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['percentage'] }}%)
                             </td>
-                            <td {{ ($v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage'] > 70) ? "class=row-background-color" : '' }}>
+                            <td {{ ($v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage'] > 60) ? "class=row-background-color" : '' }}>
                                 {{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage'] }}%)
                             </td>
-                            <td {{ ($v['beatTheBookie']['Both Teams To Score']['Yes']['percentage'] > 70) ? "class=row-background-color" : '' }}>
+                            <td {{ ($v['beatTheBookie']['Both Teams To Score']['Yes']['percentage'] > 60) ? "class=row-background-color" : '' }}>
                                 Yes - {{ $v['beatTheBookie']['Both Teams To Score']['Yes']['odds'] }}/({{ $v['beatTheBookie']['Both Teams To Score']['Yes']['percentage'] }}%)
                             </td>
-                            <td {{ ($v['beatTheBookie']['Both Teams To Score']['No']['percentage'] > 70) ? "class=row-background-color" : '' }}>
+                            <td {{ ($v['beatTheBookie']['Both Teams To Score']['No']['percentage'] > 60) ? "class=row-background-color" : '' }}>
                                 No - {{ $v['beatTheBookie']['Both Teams To Score']['No']['odds'] }}/({{ $v['beatTheBookie']['Both Teams To Score']['No']['percentage'] }}%)
                             </td>
                         </tr>
@@ -79,7 +79,7 @@
                         @foreach($v['beatTheBookie']['Correct Score'] as $res => $chance)
                            <tr class="{{ $chance['flagged'] ? 'table-success' : ''}}">
                                <th>{{ $res }}</th>
-                               <td>{{ $chance['stats'] }}</td>
+                               <td>{{ $chance['odds'] }}/({{ $chance['percentage'] }}%)</td>
                            </tr>
                         @endforeach
                     </table>
