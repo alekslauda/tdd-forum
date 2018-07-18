@@ -139,6 +139,16 @@ class PoissonAlgorithmOddsConverter {
                     $results['Away Win']['odds'],
                     $results['Away Win']['percentage'],
                     $results['Home Win']['percentage'] + $results['Draw']['percentage']
+                ),
+                '1X' => $this->findValueBet(
+                    $results['1X']['odds'],
+                    $results['1X']['percentage'],
+                    $results['Away Win']['percentage']
+                ),
+                'X2' => $this->findValueBet(
+                    $results['X2']['odds'],
+                    $results['X2']['percentage'],
+                    $results['Home Win']['percentage']
                 )
             ],
         ];
@@ -332,8 +342,20 @@ class PoissonAlgorithmOddsConverter {
             ]
         ];
 
+        $homeWinOrDraw = [
+            'odds' => round(1/(($homeWin['percentage'] + $draw['percentage'])/100), 2),
+            'percentage' => $homeWin['percentage'] + $draw['percentage']
+        ];
+
+        $awayWinOrDraw = [
+            'odds' => round(1/(($awayWin['percentage'] + $draw['percentage'])/100), 2),
+            'percentage' => $awayWin['percentage'] + $draw['percentage']
+        ];
+
         return [
             'Home Win' => $homeWin,
+            '1X' => $homeWinOrDraw,
+            'X2' => $awayWinOrDraw,
             'Draw' => $draw,
             'Away Win' => $awayWin,
             'Over/Under 1.5' => $overUnder1and5,
