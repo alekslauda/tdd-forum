@@ -157,7 +157,7 @@ $(document).ready(function () {
     e.preventDefault();
     var form = $('#valueBetCalculatorContainer').find('form');
     var odds = $('#odds').val();
-    var probability = $('#probability').val();
+    var probability = $('#probability').val().replace('%', '');
     if (!form.hasClass('hidden')) {
       form.addClass('hidden');
       var betAmount = 10;
@@ -173,20 +173,53 @@ $(document).ready(function () {
         valueBetClass = 'alert alert-danger';
       }
 
-      $('#valueBetCalculatorContainer .panel-heading').html('<span class="' + valueBetClass + '">Value bet:  ' + valueBetResult + '</span>');
+      $('#valueBetCalculatorContainer .panel-heading').text('Result');
+      $('#calculateValueBets').before('<div class="value-bet-result ' + valueBetClass + '">Value bet:  ' + valueBetResult + '</div>');
     } else {
       form.removeClass('hidden');
       $('#odds').val('');
       $('#probability').val('');
+      $('#valueBetCalculatorContainer .panel-body').find('.value-bet-result').hide();
       $('#valueBetCalculatorContainer .panel-heading').text('Calculate Value Bet');
     }
   });
 
-  $('.addProbability').click(function (e) {
+  $('.progress-bar').click(function (e) {
+
+    var probability = $(e.target).text().trim();
     if (!$('#valueBetCalculatorContainer').find('form').hasClass('hidden')) {
-      $('#probability').val($(e.target).text());
+      $('#probability').val(probability);
+      $('#odds').focus();
+      $([document.documentElement, document.body]).animate({
+        scrollTop: $('#odds').offset().top
+      }, 2000);
+    } else {
+      $('#valueBetCalculatorContainer').find('form').removeClass('hidden');
+      $('#valueBetCalculatorContainer .panel-body').find('.value-bet-result').hide();
+      $('#odds').val('');
+      $('#odds').focus();
+      $('#probability').val(probability);
+      $('#valueBetCalculatorContainer .panel-heading').text('Calculate Value Bet');
     }
   });
+
+  $(window).scroll(function () {
+    if ($(this).scrollTop() > 50) {
+      $('#back-to-top').fadeIn();
+    } else {
+      $('#back-to-top').fadeOut();
+    }
+  });
+  // scroll body to 0px on click
+  $('#back-to-top').click(function () {
+    $('#back-to-top').tooltip('hide');
+    $('body,html').animate({
+      scrollTop: 0
+    }, 800);
+    return false;
+  });
+
+  $('#back-to-top').tooltip('show');
 });
 
 /***/ })

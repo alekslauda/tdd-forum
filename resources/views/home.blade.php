@@ -2,128 +2,304 @@
 
 @section('content')
 <div class="container">
-    <div  style="
-            width: 1600px;
-            position: relative;
-            right: 150px;
-    ">
 
-        @if (count($errors))
-            <ul class="alert alert-danger">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        @endif
+    @if (count($errors))
+        <ul class="alert alert-danger">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
 
-        @if ($data)
-        <a href="/home">Recalculate</a>
+    @if($data)
+    <div class="row">
+        <a style="margin-bottom: 30px" href="/home" class="btn btn-info" role="button">Search again</a>
+
+        <div class="alert alert-warning">
+            <strong>Calculate Value Bet!</strong> Click on some percentage probability to calculate if there is any value.
+        </div>
+    </div>
+
+    <div class="row">
         <div class="panel panel-success">
             @foreach($data as $match => $v)
                 <div class="panel-heading">{{ $match }}</div>
+                <div class="panel-body">
 
-                <div class="panel-body">
-                    <table border="1" class="table">
-                        <tr>
-                            <th>Home Win</th>
-                            <th>Draw</th>
-                            <th>Away Win</th>
-                            <th colspan="2">Over/Under 1.5</th>
-                            <th colspan="2">Over/Under 2.5</th>
-                            <th colspan="2">Over/Under 3.5</th>
-                            <th colspan="2">Over/Under 4.5</th>
-                            <th colspan="2">Both Teams To Score</th>
-                        </tr>
-                        <tr class="more-visible">
-                            <td>{{ $v['beatTheBookie']['Home Win']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Home Win']['percentage'] }}</a>%)</td>
-                            <td>{{ $v['beatTheBookie']['Draw']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Draw']['percentage'] }}</a>%)</td>
-                            <td>{{ $v['beatTheBookie']['Away Win']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Away Win']['percentage'] }}</a>%)</td>
-                            <td>
-                                {{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage'] }}</a>%)
-                            </td>
-                            <td>
-                                {{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage'] }}</a>%)
-                            </td>
-                            <td>
-                                {{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage'] }}</a>%)
-                            </td>
-                            <td>
-                                {{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage'] }}</a>%)
-                            </td>
-                            <td>
-                                {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'] }}</a>%)
-                            </td>
-                            <td>
-                                {{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage'] }}</a>%)
-                            </td>
-                            <td>
-                                {{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['percentage'] }}</a>%)
-                            </td>
-                            <td>
-                                {{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage'] }}</a>%)
-                            </td>
-                            <td>
-                                Yes - {{ $v['beatTheBookie']['Both Teams To Score']['Yes']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Both Teams To Score']['Yes']['percentage'] }}</a>%)
-                            </td>
-                            <td>
-                                No - {{ $v['beatTheBookie']['Both Teams To Score']['No']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Both Teams To Score']['No']['percentage'] }}</a>%)
-                            </td>
-                        </tr>
-                        <tr class="more-visible">
-                            <td>1X - {{ $v['beatTheBookie']['1X']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['1X']['percentage'] }}</a>%)</td>
-                            <td>X2 - {{ $v['beatTheBookie']['X2']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['X2']['percentage'] }}</a>%)</td>
-                        </tr>
-                    </table>
-                </div>
-               <div class="panel" id="valueBetCalculatorContainer">
-                   <div class="panel-heading">Calculate Value Bet</div>
-                   <div class="panel-body">
-                       <form action="" method="POST">
-                           <div class="form-group match-input">
-                               <label class="match-input-label" id="labelMatch-1" for="match-1">Add Bookamer Odds</label>
-                               <input type="text" class="form-control" id="odds" placeholder="Odds">
-                           </div>
-                           <div class="form-group match-input">
-                               <label class="match-input-label" id="labelMatch-1" for="match-1">Add Win Probability</label>
-                               <input type="text" class="form-control" id="probability" placeholder="Probability %">
-                           </div>
-                       </form>
-                       <button type="submit" class="btn btn-primary" id="calculateValueBets">Calculate</button>
-                   </div>
-               </div>
-                <div class="panel-body">
-                    <table class="table">
-                        <tr>
-                            <th colspan="2" class="panel-heading">Correct Score</th>
-                        </tr>
-                        @foreach($v['beatTheBookie']['Correct Score'] as $res => $chance)
-                           <tr class="{{ $chance['flagged'] ? 'table-success' : ''}}">
-                               <th>{{ $res }}</th>
-                               <td>{{ $chance['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $chance['percentage'] }}</a>%)</td>
-                           </tr>
-                        @endforeach
-                    </table>
-                    <pre>{{ print_r($v['valueBets'], true) }}</pre>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Sign</div>
+                        <div class="panel-body">
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Home Win</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Home Win']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['Home Win']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Home Win']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['Home Win']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <span>Odds:  {{ $v['beatTheBookie']['Home Win']['odds'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Draw</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Draw']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['Draw']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Draw']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['Draw']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <span>Odds:  {{ $v['beatTheBookie']['Draw']['odds'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Away Win</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Away Win']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['Away Win']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Away Win']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['Away Win']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <span>Odds:  {{ $v['beatTheBookie']['Away Win']['odds'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Home Win Or Draw / (1X)</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['1X']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['1X']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['1X']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['1X']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <span>Odds:  {{ $v['beatTheBookie']['1X']['odds'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Away Win Or Draw / (X2)</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['X2']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['X2']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['X2']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['X2']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <span>Odds:  {{ $v['beatTheBookie']['X2']['odds'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Goals</div>
+                        <div class="panel-body">
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Over 1.5</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['odds'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Over 2.5</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['odds'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Over 3.5</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['odds'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Over 4.5</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['odds'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <hr>
+
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Under 1.5</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['odds'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Under 2.5</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['odds'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Under 3.5</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['odds'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Under 4.5</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['odds'] }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             @endforeach
         </div>
-        @else
-            <form action="" method="POST">
-                {{ csrf_field() }}
-                <div class="form-group match-input">
-                    <label class="match-input-label" id="labelMatch-1" for="match-1">Add Match Game</label>
-                    <input type="text" class="form-control" id="match-1" placeholder="Add match" name="match[1]" value="{{ old('match.1') }}">
-                </div>
-                <div class="form-group add-more-games">
-                    <a id="addFootballMatches">Add More Games</a>
-                </div>
-                <div class="form-group">
-                    <a id="loadCountriesWithCompetitions">Load Countries With Competitions</a>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        @endif
+        <div class="panel panel-primary" id="valueBetCalculatorContainer">
+            <div class="panel-heading">Calculate Value Bet</div>
+            <div class="panel-body">
+                <form action="" method="POST">
+                    <div class="form-group match-input">
+                        <label class="match-input-label" for="odds">Add Bookamer Odds</label>
+                        <input type="text" class="form-control" id="odds" placeholder="Odds">
+                    </div>
+                    <div class="form-group match-input">
+                        <label class="match-input-label" for="probability">Add Win Probability</label>
+                        <input type="text" class="form-control" id="probability" placeholder="Probability %">
+                    </div>
+                </form>
+                <button type="submit" class="btn btn-primary" id="calculateValueBets">Calculate</button>
+                <a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" title="Click to return on the top page" data-toggle="tooltip" data-placement="left"><span class="glyphicon glyphicon-chevron-up"></span></a>
+            </div>
+        </div>
     </div>
+    @else
+        <form action="" method="POST">
+            {{ csrf_field() }}
+            <div class="form-group match-input">
+                <label class="match-input-label" id="labelMatch-1" for="match-1">Add Match Game</label>
+                <input type="text" class="form-control" id="match-1" placeholder="Add match" name="match[1]" value="{{ old('match.1') }}">
+            </div>
+            <div class="form-group add-more-games">
+                <a id="addFootballMatches">Add More Games</a>
+            </div>
+            <div class="form-group">
+                <a id="loadCountriesWithCompetitions">Load Countries With Competitions</a>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    @endif
 </div>
 @endsection
 @section('appScripts')
