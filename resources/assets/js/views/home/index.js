@@ -103,7 +103,7 @@ $(document).ready(function(){
         }
 
         $('#valueBetCalculatorContainer .panel-heading').text('Result');
-        $('#calculateValueBets').before(`<div class="value-bet-result ${valueBetClass}">Value bet:  ${valueBetResult}</div>`);
+        $('#calculateValueBets').before(`<p style="width: 15%; text-align: center" class="value-bet-result ${valueBetClass}">Value bet:  ${valueBetResult}</p>`);
       } else {
         form.removeClass('hidden');
         $('#odds').val('');
