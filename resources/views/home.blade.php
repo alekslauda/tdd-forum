@@ -123,7 +123,7 @@
                         <div class="panel-body">
                             <div class="col-md-4">
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">Over 1.5</div>
+                                    <div class="panel-heading">Over/Under 1.5</div>
                                     <div class="panel-body">
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage'] }}%;">
@@ -133,14 +133,17 @@
                                                 {{ (100 - $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage']) }}%
                                             </div>
                                         </div>
-                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['odds'] }}</span>
+                                        <div>
+                                            <span>Odds:  {{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['odds'] }}</span>
+                                            <span class="float-right">Odds:  {{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['odds'] }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-4">
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">Over 2.5</div>
+                                    <div class="panel-heading">Over/Under 2.5</div>
                                     <div class="panel-body">
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage'] }}%;">
@@ -150,14 +153,17 @@
                                                 {{ (100 - $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage']) }}%
                                             </div>
                                         </div>
-                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['odds'] }}</span>
+                                        <div>
+                                            <span>Odds:  {{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['odds'] }}</span>
+                                            <span class="float-right">Odds:  {{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['odds'] }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-4">
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">Over 3.5</div>
+                                    <div class="panel-heading">Over/Under 3.5</div>
                                     <div class="panel-body">
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'] }}%;">
@@ -167,14 +173,17 @@
                                                 {{ (100 - $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage']) }}%
                                             </div>
                                         </div>
-                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['odds'] }}</span>
+                                        <div>
+                                            <span>Odds:  {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['odds'] }}</span>
+                                            <span class="float-right">Odds:  {{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['odds'] }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-4">
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">Over 4.5</div>
+                                    <div class="panel-heading">Over/Under 4.5</div>
                                     <div class="panel-body">
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['percentage'] }}%;">
@@ -184,79 +193,10 @@
                                                 {{ (100 - $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['percentage']) }}%
                                             </div>
                                         </div>
-                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['odds'] }}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="clearfix"></div>
-
-                            <hr>
-
-                            <div class="col-md-4">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Under 1.5</div>
-                                    <div class="panel-body">
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage'] }}%;">
-                                                {{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage'] }}%
-                                            </div>
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage']) }}%;">
-                                                {{ (100 - $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage']) }}%
-                                            </div>
+                                        <div>
+                                            <span>Odds:  {{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['odds'] }}</span>
+                                            <span class="float-right">Odds:  {{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['odds'] }}</span>
                                         </div>
-                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['odds'] }}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Under 2.5</div>
-                                    <div class="panel-body">
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage'] }}%;">
-                                                {{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage'] }}%
-                                            </div>
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage']) }}%;">
-                                                {{ (100 - $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage']) }}%
-                                            </div>
-                                        </div>
-                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['odds'] }}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Under 3.5</div>
-                                    <div class="panel-body">
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage'] }}%;">
-                                                {{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage'] }}%
-                                            </div>
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage']) }}%;">
-                                                {{ (100 - $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage']) }}%
-                                            </div>
-                                        </div>
-                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['odds'] }}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Under 4.5</div>
-                                    <div class="panel-body">
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage'] }}%;">
-                                                {{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage'] }}%
-                                            </div>
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage']) }}%;">
-                                                {{ (100 - $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage']) }}%
-                                            </div>
-                                        </div>
-                                        <span>Odds:  {{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['odds'] }}</span>
                                     </div>
                                 </div>
                             </div>
