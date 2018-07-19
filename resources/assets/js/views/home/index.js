@@ -85,14 +85,37 @@ $(document).ready(function(){
     $('#calculateValueBets').click(function(e){
       e.preventDefault();
       let form  = $('#valueBetCalculatorContainer').find('form');
+      let odds = $('#odds').val();
+      let probability = $('#probability').val();
       if( !form.hasClass('hidden')) {
         form.addClass('hidden');
-        $('#valueBetCalculatorContainer .panel-heading').text('Value bet');
+        let betAmount = 10;
+        let wonBetAmount = (betAmount * odds) - betAmount;
+        let lostBetAmount = betAmount;
+        let winChance = (probability/100).toFixed(2);
+        let lossChance = ((100 - probability)/100).toFixed(2);
+
+        let valueBetResult = ((wonBetAmount * winChance) - (lostBetAmount * lossChance)).toFixed(2)
+
+        let valueBetClass = 'alert alert-success';
+        if( valueBetResult < 0) {
+          valueBetClass = 'alert alert-danger';
+        }
+
+        $('#valueBetCalculatorContainer .panel-heading').html(`<span class="${valueBetClass}">Value bet:  ${valueBetResult}</span>`);
       } else {
         form.removeClass('hidden');
+        $('#odds').val('');
+        $('#probability').val('');
         $('#valueBetCalculatorContainer .panel-heading').text('Calculate Value Bet');
       }
 
+    })
+
+    $('.addProbability').click(function(e) {
+        if( !$('#valueBetCalculatorContainer').find('form').hasClass('hidden')) {
+          $('#probability').val($(e.target).text())
+        }
     })
 
 })

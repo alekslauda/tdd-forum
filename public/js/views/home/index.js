@@ -156,12 +156,35 @@ $(document).ready(function () {
   $('#calculateValueBets').click(function (e) {
     e.preventDefault();
     var form = $('#valueBetCalculatorContainer').find('form');
+    var odds = $('#odds').val();
+    var probability = $('#probability').val();
     if (!form.hasClass('hidden')) {
       form.addClass('hidden');
-      $('#valueBetCalculatorContainer .panel-heading').text('Value bet');
+      var betAmount = 10;
+      var wonBetAmount = betAmount * odds - betAmount;
+      var lostBetAmount = betAmount;
+      var winChance = (probability / 100).toFixed(2);
+      var lossChance = ((100 - probability) / 100).toFixed(2);
+
+      var valueBetResult = (wonBetAmount * winChance - lostBetAmount * lossChance).toFixed(2);
+
+      var valueBetClass = 'alert alert-success';
+      if (valueBetResult < 0) {
+        valueBetClass = 'alert alert-danger';
+      }
+
+      $('#valueBetCalculatorContainer .panel-heading').html('<span class="' + valueBetClass + '">Value bet:  ' + valueBetResult + '</span>');
     } else {
       form.removeClass('hidden');
+      $('#odds').val('');
+      $('#probability').val('');
       $('#valueBetCalculatorContainer .panel-heading').text('Calculate Value Bet');
+    }
+  });
+
+  $('.addProbability').click(function (e) {
+    if (!$('#valueBetCalculatorContainer').find('form').hasClass('hidden')) {
+      $('#probability').val($(e.target).text());
     }
   });
 });

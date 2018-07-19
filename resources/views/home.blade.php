@@ -35,43 +35,43 @@
                             <th colspan="2">Both Teams To Score</th>
                         </tr>
                         <tr class="more-visible">
-                            <td>{{ $v['beatTheBookie']['Home Win']['odds'] }}/({{ $v['beatTheBookie']['Home Win']['percentage'] }}%)</td>
-                            <td>{{ $v['beatTheBookie']['Draw']['odds'] }}/({{ $v['beatTheBookie']['Draw']['percentage'] }}%)</td>
-                            <td>{{ $v['beatTheBookie']['Away Win']['odds'] }}/({{ $v['beatTheBookie']['Away Win']['percentage'] }}%)</td>
+                            <td>{{ $v['beatTheBookie']['Home Win']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Home Win']['percentage'] }}</a>%)</td>
+                            <td>{{ $v['beatTheBookie']['Draw']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Draw']['percentage'] }}</a>%)</td>
+                            <td>{{ $v['beatTheBookie']['Away Win']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Away Win']['percentage'] }}</a>%)</td>
                             <td>
-                                {{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage'] }}%)
+                                {{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 1.5']['over 1.5']['percentage'] }}</a>%)
                             </td>
                             <td>
-                                {{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage'] }}%)
+                                {{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 1.5']['under 1.5']['percentage'] }}</a>%)
                             </td>
                             <td>
-                                {{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage'] }}%)
+                                {{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage'] }}</a>%)
                             </td>
                             <td>
-                                {{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage'] }}%)
+                                {{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 2.5']['under 2.5']['percentage'] }}</a>%)
                             </td>
                             <td>
-                                {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'] }}%)
+                                {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'] }}</a>%)
                             </td>
                             <td>
-                                {{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage'] }}%)
+                                {{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 3.5']['under 3.5']['percentage'] }}</a>%)
                             </td>
                             <td>
-                                {{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['percentage'] }}%)
+                                {{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 4.5']['over 4.5']['percentage'] }}</a>%)
                             </td>
                             <td>
-                                {{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['odds'] }}/({{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage'] }}%)
+                                {{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Over/Under 4.5']['under 4.5']['percentage'] }}</a>%)
                             </td>
                             <td>
-                                Yes - {{ $v['beatTheBookie']['Both Teams To Score']['Yes']['odds'] }}/({{ $v['beatTheBookie']['Both Teams To Score']['Yes']['percentage'] }}%)
+                                Yes - {{ $v['beatTheBookie']['Both Teams To Score']['Yes']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Both Teams To Score']['Yes']['percentage'] }}</a>%)
                             </td>
                             <td>
-                                No - {{ $v['beatTheBookie']['Both Teams To Score']['No']['odds'] }}/({{ $v['beatTheBookie']['Both Teams To Score']['No']['percentage'] }}%)
+                                No - {{ $v['beatTheBookie']['Both Teams To Score']['No']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['Both Teams To Score']['No']['percentage'] }}</a>%)
                             </td>
                         </tr>
                         <tr class="more-visible">
-                            <td>1X - {{ $v['beatTheBookie']['1X']['odds'] }}/({{ $v['beatTheBookie']['1X']['percentage'] }}%)</td>
-                            <td>X2 - {{ $v['beatTheBookie']['X2']['odds'] }}/({{ $v['beatTheBookie']['X2']['percentage'] }}%)</td>
+                            <td>1X - {{ $v['beatTheBookie']['1X']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['1X']['percentage'] }}</a>%)</td>
+                            <td>X2 - {{ $v['beatTheBookie']['X2']['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $v['beatTheBookie']['X2']['percentage'] }}</a>%)</td>
                         </tr>
                     </table>
                 </div>
@@ -99,7 +99,7 @@
                         @foreach($v['beatTheBookie']['Correct Score'] as $res => $chance)
                            <tr class="{{ $chance['flagged'] ? 'table-success' : ''}}">
                                <th>{{ $res }}</th>
-                               <td>{{ $chance['odds'] }}/({{ $chance['percentage'] }}%)</td>
+                               <td>{{ $chance['odds'] }}/(<a class="addProbability" href="#" title="Click The Probability To Calculate Value Bet">{{ $chance['percentage'] }}</a>%)</td>
                            </tr>
                         @endforeach
                     </table>
