@@ -203,6 +203,33 @@
                         </div>
                     </div>
 
+                    <div class="clearfix"></div>
+
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Both Teams Can Score</div>
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Yes/No</div>
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Both Teams To Score']['Yes']['percentage'] }}%;">
+                                                {{ $v['beatTheBookie']['Both Teams To Score']['Yes']['percentage'] }}%
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Both Teams To Score']['Yes']['percentage']) }}%;">
+                                                {{ (100 - $v['beatTheBookie']['Both Teams To Score']['Yes']['percentage']) }}%
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span>Odds:  {{ $v['beatTheBookie']['Both Teams To Score']['Yes']['odds'] }}</span>
+                                            <span class="float-right">Odds:  {{ $v['beatTheBookie']['Both Teams To Score']['No']['odds'] }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             @endforeach
         </div>
