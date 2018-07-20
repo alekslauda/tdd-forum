@@ -18,6 +18,8 @@
         <div class="alert alert-warning">
             <strong>Calculate Value Bet!</strong> Click on some percentage probability to calculate if there is any value.
         </div>
+
+        <a id="back-to-down" href="#" class="btn btn-primary btn-lg back-to-down" role="button" title="Click to return on the bottom of the page" data-toggle="tooltip" data-placement="left"><span class="glyphicon glyphicon-chevron-down"></span></a>
     </div>
 
     <div class="row">

@@ -38,6 +38,14 @@
             display:none;
         }
 
+        .back-to-down {
+            cursor: pointer;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display:none;
+        }
+
         .loader {
             border: 16px solid #f3f3f3; /* Light grey */
             border-top: 16px solid #3498db; /* Blue */

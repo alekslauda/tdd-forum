@@ -151,4 +151,22 @@ $(document).ready(function(){
 
   $('#back-to-top').tooltip('show');
 
+  $(window).scroll(function () {
+    if ($(this).scrollTop() > 50) {
+      $('#back-to-down').fadeIn();
+    } else {
+      $('#back-to-down').fadeOut();
+    }
+  });
+  // scroll body to 0px on click
+  $('#back-to-down').click(function () {
+    $('#back-to-down').tooltip('hide');
+    $('body,html').animate({
+      scrollTop: $(document).height()-$(window).height()
+    }, 800);
+    return false;
+  });
+
+  $('#back-to-down').tooltip('show');
+
 })
