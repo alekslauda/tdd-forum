@@ -263,6 +263,9 @@ class PoissonAlgorithmOddsConverter {
     {
         $fixtures = $this->convert($fixture1, $fixture2);
         $fixtureCalc = $fixtures[0] * $fixtures[1];
+        if($fixtureCalc == 0) {
+            return;
+        }
         $probability = round((1/(1/$fixtureCalc))*100, 2);
         return [
             'odds' => round((1 / ($fixtureCalc)), 2),

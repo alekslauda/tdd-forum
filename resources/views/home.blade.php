@@ -230,6 +230,22 @@
                         </div>
                     </div>
 
+                    <div class="clearfix"></div>
+
+                    <div class="panel-body">
+                        <table class="table">
+                            <tr>
+                                <th colspan="2" class="panel-heading">Correct Score</th>
+                            </tr>
+                            @foreach($v['beatTheBookie']['Correct Score'] as $res => $chance)
+                                <tr class="{{ $chance['flagged'] ? 'table-success' : ''}}">
+                                    <th>{{ $res }}</th>
+                                    <td>{{ $chance['odds'] }}/({{ $chance['percentage'] }}%)</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+
                 </div>
             @endforeach
         </div>
