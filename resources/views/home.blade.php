@@ -270,20 +270,18 @@
         </div>
     </div>
     @else
-        <form action="" method="POST">
-            {{ csrf_field() }}
-            <div class="form-group match-input">
-                <label class="match-input-label" id="labelMatch-1" for="match-1">Add Match Game</label>
-                <input type="text" class="form-control" id="match-1" placeholder="Add match" name="match[1]" value="{{ old('match.1') }}">
+            <div class="row">
+                <div class="jumbotron">
+                    <h1>Check Predictions</h1>
+                    <form action="" method="POST">
+                        {{ csrf_field() }}
+                        <div class="form-group">
+                            <a id="loadCountriesWithCompetitions">Load Countries With Competitions</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
             </div>
-            <div class="form-group add-more-games">
-                <a id="addFootballMatches">Add More Games</a>
-            </div>
-            <div class="form-group">
-                <a id="loadCountriesWithCompetitions">Load Countries With Competitions</a>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
     @endif
 </div>
 @endsection

@@ -29,23 +29,12 @@ class HomeController extends Controller
 
         if ($request->isMethod('post')) {
             $this->validate($request, [
-                'match.1' => 'required',
                 'competitions' => 'required'
-            ], [
-                'match.1.required' => 'Enter match game'
             ]);
-            $matches = $request->input('match');
             $competitionUrl = $request->input('competitions');
-            $games = [];
-            foreach($matches as $match) {
-                $game = explode('-', $match);
-                if (count($game) == 2) {
-                    $games[] = $game;
-                }
-            }
 
             try {
-                $soccerwayProcessor = new SoccerwayProcessor($competitionUrl, $games);
+                $soccerwayProcessor = new SoccerwayProcessor($competitionUrl);
                 $poisson = new PoissonAlgorithmOddsConverter($soccerwayProcessor);
                 $data = $poisson->generatePredictions();
             } catch (TeamNotFound $tex) {

@@ -20,18 +20,6 @@ class CompetitionBuilder
             });
         });
 
-//        foreach($competitions as $comp => $link) {
-//            $children = [];
-//            $client->request('GET', \Config::get('app.SOCCERWAY_URL') . $comp)->filter('ul.left-tree')->each(function($node) use (&$children){
-//                $node->filter('li')->each(function($li) use(&$children){
-//                    $children[$li->filter('a')->text()] = $li->filter('a')->attr('href');
-//                });
-//            });
-//            $competitions[$comp] = ['children' => $children];
-//        }
-
-
-
         return $competitions;
     }
 

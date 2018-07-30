@@ -134,25 +134,6 @@ $(document).ready(function () {
     });
   });
 
-  $('#addFootballMatches').click(function (e) {
-
-    var lastMatch = $('.form-group.match-input').last().clone();
-    var lastName = lastMatch.find('input').attr('name');
-
-    var id = lastName.match(/\[(.*)\]/i)[1];
-    var newId = parseInt(id) + 1;
-
-    lastMatch.find('label').attr('for', 'match-' + newId);
-    lastMatch.find('label').attr('id', 'labelMatch-' + newId);
-
-    lastMatch.find('input').attr('name', 'match[' + newId + ']');
-    lastMatch.find('input').attr('id', 'match-' + newId);
-    lastMatch.find('input').val("");
-    var newMatch = lastMatch;
-
-    newMatch.insertAfter('.form-group.match-input:last');
-  });
-
   $('#calculateValueBets').click(function (e) {
     e.preventDefault();
     var form = $('#valueBetCalculatorContainer').find('form');
@@ -160,6 +141,9 @@ $(document).ready(function () {
     var probability = $('#probability').val().replace('%', '');
     if (!form.hasClass('hidden')) {
       form.addClass('hidden');
+      /**
+       * START CALCULATING VALUE BET
+       */
       var betAmount = 10;
       var wonBetAmount = betAmount * odds - betAmount;
       var lostBetAmount = betAmount;
@@ -168,13 +152,31 @@ $(document).ready(function () {
 
       var valueBetResult = (wonBetAmount * winChance - lostBetAmount * lossChance).toFixed(2);
 
-      var valueBetClass = 'alert alert-success';
-      if (valueBetResult < 0) {
-        valueBetClass = 'alert alert-danger';
+      /**
+       * END
+       */
+
+      /**
+       * START CALCULATING KELLY STRATEGY
+       */
+      var B = odds - 1;
+      var P = probability / 100;
+      var Q = 1 - P;
+      var kellyStrategy = (B * P - Q) / B;
+      /**
+       * END
+       */
+
+      var valueBetClass = 'alert alert-danger';
+      var message = '\n              <ul class="list-unstyled value-bet-result ' + valueBetClass + '">\n                  <li>There is no value here.</li>\n              </ul>';
+
+      if (valueBetResult > 0) {
+        valueBetClass = 'alert alert-success';
+        message = '<ul class="list-unstyled value-bet-result ' + valueBetClass + '">\n              <li>Value bet:  ' + valueBetResult + '</li>\n              <ul class="list-unstyled">\n                <li>Applying <u>Kelly Critteria</u> bet:  <strong>' + Math.round(kellyStrategy * 100) + '%</strong> of your bank<br/><br/></li>\n                <li class="alert alert-info">Play safe end go for: <strong>' + Math.round(kellyStrategy.toFixed(2) * 100 / 2) + '%</strong> of your bank</li>\n              </ul>\n          </ul>';
       }
 
       $('#valueBetCalculatorContainer .panel-heading').text('Result');
-      $('#calculateValueBets').before('<p style="width: 15%; text-align: center" class="value-bet-result ' + valueBetClass + '">Value bet:  ' + valueBetResult + '</p>');
+      $('#calculateValueBets').before('' + message);
     } else {
       form.removeClass('hidden');
       $('#odds').val('');

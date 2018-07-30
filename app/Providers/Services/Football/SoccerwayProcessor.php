@@ -2,6 +2,7 @@
 
 
 namespace App\Providers\Services\Football;
+use Carbon\Carbon;
 use Goutte\Client;
 
 class SoccerwayProcessor
@@ -17,6 +18,10 @@ class SoccerwayProcessor
 
     const GOAL_OCCURANCES = 5;
 
+    const EXTRACT_TODAY_DATE = 1;
+    const EXTRACT_TODAY_HOME_TEAM = 2;
+    const EXTRACT_TODAY_AWAY_TEAM = 4;
+
     protected $soccerwayCompetitionUrl;
 
     protected $matches;
@@ -25,13 +30,11 @@ class SoccerwayProcessor
 
     protected $data;
 
-
     protected $client;
 
-    public function __construct($soccerwayCompetitionUrl, $matches)
+    public function __construct($soccerwayCompetitionUrl)
     {
         $this->soccerwayCompetitionUrl = $soccerwayCompetitionUrl;
-        $this->matches = $matches;
         $this->client = new Client();
         $this->setResults();
         $this->buildData();
@@ -82,6 +85,9 @@ class SoccerwayProcessor
     protected function buildData()
     {
         $crawler = $this->client->request('GET', \Config::get('app.SOCCERWAY_URL') . $this->soccerwayCompetitionUrl);
+
+        $this->buildTodayMatches($crawler);
+
         $options = $crawler->filter('#season_id_selector')->children();
         $getPastYearLink = $options->eq($options->count() + 1 - $options->count())->attr('value');
         $item = explode('/', $getPastYearLink);
@@ -133,6 +139,9 @@ class SoccerwayProcessor
         $html = $soccerwayData['commands'][0]['parameters']['content'];
         $crawler2->clear();
         $crawler2->addHtmlContent($html);
+
+
+
         $table = $crawler2->filter('#page_competition_1_block_competition_tables_7_block_competition_wide_table_1_table')->filter('tr')->each(function ($tr, $i) {
             return $tr->filter('td')->each(function ($td, $i) {
                 return trim($td->text());
@@ -141,6 +150,31 @@ class SoccerwayProcessor
 
         unset($table[0], $table[1]);
         $this->data = array_values($table);
+    }
+
+    protected function buildTodayMatches($crawler)
+    {
+        $todayDate = Carbon::today();
+
+        $table = $crawler->filter('#page_competition_1_block_competition_matches_summary_5')->filter('tr')->each(function ($tr, $i) {
+            return $tr->filter('td')->each(function ($td, $i) {
+                return trim($td->text());
+            });
+        });
+
+        array_shift($table);
+        $this->matches = [];
+
+        foreach($table as $games) {
+
+            $gameDate = Carbon::createFromFormat('d/m/y' ,$games[self::EXTRACT_TODAY_DATE]);
+            $parsedGameDate = Carbon::parse($gameDate->format('Y-m-d'));
+
+            if ($todayDate->eq($parsedGameDate)) {
+                $this->matches[] = [$games[self::EXTRACT_TODAY_HOME_TEAM], $games[self::EXTRACT_TODAY_AWAY_TEAM]];
+            }
+        }
+
     }
 
     protected function setResults() {
