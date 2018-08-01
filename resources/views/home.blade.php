@@ -154,7 +154,7 @@
                                     <div class="panel-body">
                                         <div class="progress">
                                             <div class="progress-bar {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'] > (100 - $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'])? 'progress-bar-success' : 'progress-bar-danger' }}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'] }}%;">
-                                                {{ $v['beatTheBookie']['Over/Under 2.5']['over 2.5']['percentage'] }}%
+                                                {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'] }}%
                                             </div>
                                             <div class="progress-bar {{ $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'] > (100 - $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage'])? 'progress-bar-danger' : 'progress-bar-success' }} " role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage']) }}%;">
                                                 {{ (100 - $v['beatTheBookie']['Over/Under 3.5']['over 3.5']['percentage']) }}%
