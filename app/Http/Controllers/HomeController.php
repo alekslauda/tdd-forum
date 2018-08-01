@@ -51,6 +51,11 @@ class HomeController extends Controller
                 $error = ValidationException::withMessages([
                     'system_error' => ['Something went wrong. Please try again later'],
                 ]);
+            } catch (\Exception $e) {
+                \Log::error('System error: '. $e->getMessage() . ' | Trace: ' . $e->getTraceAsString());
+                $error = ValidationException::withMessages([
+                    'system_error' => ['Something went wrong. Please try again later'],
+                ]);
             }
 
             if($error) {
