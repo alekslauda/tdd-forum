@@ -242,7 +242,7 @@
                 <form action="" method="POST">
                     <div class="form-group match-input">
                         <label class="match-input-label" for="odds">Add Bookamer Odds</label>
-                        <input type="text" class="form-control" id="odds" placeholder="Odds">
+                        <input type="text" class="form-control" id="odds" placeholder="Bookmaker Odds">
                     </div>
                     <div class="form-group match-input">
                         <label class="match-input-label" for="probability">Add Win Probability</label>
