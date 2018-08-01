@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Providers\Services\Football\CompetitionBuilder;
 use App\Providers\Services\Football\NoPredictionsWrongFileData;
 use App\Providers\Services\Football\PoissonAlgorithmOddsConverter;
+use App\Providers\Services\Football\Predictions\Factories\GoalsFactory;
 use App\Providers\Services\Football\SoccerwayProcessor;
 use App\Providers\Services\Football\TeamNotFound;
 use Illuminate\Http\Request;

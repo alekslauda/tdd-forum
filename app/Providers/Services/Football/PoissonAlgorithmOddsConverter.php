@@ -2,6 +2,18 @@
 namespace App\Providers\Services\Football;
 
 
+use App\Providers\Services\Football\Predictions\AwayWin;
+use App\Providers\Services\Football\Predictions\AwayWinOrDraw;
+use App\Providers\Services\Football\Predictions\Draw;
+use App\Providers\Services\Football\Predictions\Factories\GoalsFactory;
+use App\Providers\Services\Football\Predictions\Factories\SignFactory;
+use App\Providers\Services\Football\Predictions\HomeWin;
+use App\Providers\Services\Football\Predictions\HomeWinOrDraw;
+use App\Providers\Services\Football\Predictions\Over;
+use App\Providers\Services\Football\Predictions\Prediction;
+use App\Providers\Services\Football\Predictions\Goals\Standard;
+use App\Providers\Services\Football\Predictions\Types;
+
 class TeamNotFound extends \Exception {}
 
 class NoPredictionsWrongFileData extends \Exception {}
@@ -169,93 +181,22 @@ class PoissonAlgorithmOddsConverter {
 
         }
 
-        $homeWin = [
-            'odds' => round((1/$homeWinPrediction), 2),
-            'percentage' =>round((1/(1/$homeWinPrediction))*100, 2)
-        ];
+        SignFactory::addPrediction(new Prediction($homeWinPrediction, 'Home Win', Types::HOME_WIN));
+        SignFactory::addPrediction(new Prediction($drawPrediction, 'Draw', Types::DRAW));
+        SignFactory::addPrediction(new Prediction($awayWinPrediction, 'Away Win', Types::AWAY_WIN));
+        SignFactory::addPrediction(new Prediction($homeWinPrediction + $drawPrediction, 'Home Win Or Draw', Types::HOME_WIN_OR_DRAW));
+        SignFactory::addPrediction(new Prediction($awayWinPrediction + $drawPrediction, 'Away Win Or Draw', Types::AWAY_WIN_OR_DRAW));
 
-        $draw = [
-            'odds' => round((1/$drawPrediction), 2),
-            'percentage' =>round((1/(1/$drawPrediction))*100, 2)
-        ];
-        $awayWin = [
-            'odds' => round((1/$awayWinPrediction), 2),
-            'percentage' =>round((1/(1/$awayWinPrediction))*100, 2)
-        ];
-        $overUnder1and5 = [
-            'over 1.5' => [
-                'odds' => round((1/$over1and5Prediction), 2),
-                'percentage' => round((1/(1/$over1and5Prediction))*100, 2)
-            ],
-            'under 1.5' => [
-                'odds' => round(1/((100 - round((1/(1/$over1and5Prediction))*100, 2)) / 100), 2),
-                'percentage' => (100 - round((1/(1/$over1and5Prediction))*100, 2)),
-            ],
-        ];
-        $overUnder2and5 = [
-            'over 2.5' => [
-                'odds' => round((1/$over2and5Prediction), 2),
-                'percentage' => round((1/(1/$over2and5Prediction))*100, 2)
-            ],
-            'under 2.5' => [
-                'odds' => round(1/((100 - round((1/(1/$over2and5Prediction))*100, 2)) / 100), 2),
-                'percentage' => (100 - round((1/(1/$over2and5Prediction))*100, 2)),
-            ],
-        ];
-        $overUnder3and5 = [
-            'over 3.5' => [
-                'odds' => round((1/$over3and5Prediction), 2),
-                'percentage' => round((1/(1/$over3and5Prediction))*100, 2)
-            ],
-            'under 3.5' => [
-                'odds' => round(1/((100 - round((1/(1/$over3and5Prediction))*100, 2)) / 100), 2),
-                'percentage' => (100 - round((1/(1/$over3and5Prediction))*100, 2)),
-            ],
-        ];
-        $overUnder4and5 = [
-            'over 4.5' => [
-                'odds' => round((1/$over4and5Prediction), 2),
-                'percentage' => round((1/(1/$over4and5Prediction))*100, 2)
-            ],
-            'under 4.5' => [
-                'odds' => round(1/((100 - round((1/(1/$over4and5Prediction))*100, 2)) / 100), 2),
-                'percentage' => (100 - round((1/(1/$over4and5Prediction))*100, 2)),
-            ],
-        ];
 
-        $bothTeamToScore = [
-            'Yes' => [
-                'odds' => round((1/$bothTeamToScorePrediction), 2),
-                'percentage' => round((1/(1/$bothTeamToScorePrediction))*100, 2)
-            ],
-            'No' => [
-                'odds' => round(1/((100 - round((1/(1/$bothTeamToScorePrediction))*100, 2)) / 100), 2),
-                'percentage' => (100 - round((1/(1/$bothTeamToScorePrediction))*100, 2))
-            ]
-        ];
-
-        $homeWinOrDraw = [
-            'odds' => round(1/(($homeWin['percentage'] + $draw['percentage'])/100), 2),
-            'percentage' => $homeWin['percentage'] + $draw['percentage']
-        ];
-
-        $awayWinOrDraw = [
-            'odds' => round(1/(($awayWin['percentage'] + $draw['percentage'])/100), 2),
-            'percentage' => $awayWin['percentage'] + $draw['percentage']
-        ];
+        GoalsFactory::addPrediction(new Standard(new Prediction($over1and5Prediction, 'Over/Under 1.5', Types::OVER_1_5)));
+        GoalsFactory::addPrediction(new Standard(new Prediction($over2and5Prediction, 'Over/Under 2.5', Types::OVER_2_5)));
+        GoalsFactory::addPrediction(new Standard(new Prediction($over3and5Prediction, 'Over/Under 3.5', Types::OVER_3_5)));
+        GoalsFactory::addPrediction(new Standard(new Prediction($over4and5Prediction, 'Over/Under 4.5', Types::OVER_4_5)));
+        GoalsFactory::addPrediction(new Standard(new Prediction($bothTeamToScorePrediction, 'Both Teams Can Score', Types::BOTH_TEAMS_CAN_SCORE)));
 
         return [
-            'Home Win' => $homeWin,
-            '1X' => $homeWinOrDraw,
-            'X2' => $awayWinOrDraw,
-            'Draw' => $draw,
-            'Away Win' => $awayWin,
-            'Over/Under 1.5' => $overUnder1and5,
-            'Over/Under 2.5' => $overUnder2and5,
-            'Over/Under 3.5' => $overUnder3and5,
-            'Over/Under 4.5' => $overUnder4and5,
-            'Both Teams To Score' => $bothTeamToScore,
-            'Correct Score' => $correctScore
+            'Sign' => SignFactory::getAll(),
+            'Goals' => GoalsFactory::getAll()
         ];
     }
 
