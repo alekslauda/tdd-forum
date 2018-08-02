@@ -70,7 +70,8 @@ class SoccerwayProcessor
         $teamNames = array_column($this->data, 2);
         $pos = false;
         foreach($teamNames as $k => $name) {
-            if(mb_substr(mb_strtolower($name), 0, 5) === mb_substr(mb_strtolower($team), 0, 5)) {
+//            if(mb_substr(mb_strtolower($name), 0, 5) === mb_substr(mb_strtolower($team), 0, 5)) {
+            if($name === $team) {
                 $pos = $k;
             }
         }
