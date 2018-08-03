@@ -13,7 +13,7 @@
 
     @if($data)
     <div class="row">
-        <a style="margin-bottom: 30px" href="/home" class="btn btn-info" role="button">Search again</a>
+        <a style="margin-bottom: 30px" href="/home" class="btn btn-primary" role="button"><i class="glyphicon glyphicon-chevron-left"></i>Search again</a>
 
         <div class="alert alert-warning">
             <strong>Calculate Value Bet!</strong> Click on some percentage probability to calculate if there is any value.
