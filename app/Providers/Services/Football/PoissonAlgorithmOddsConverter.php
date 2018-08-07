@@ -56,6 +56,7 @@ class PoissonAlgorithmOddsConverter {
 
             $homeTeam = trim(($matches[0]));
             $awayTeam = trim(($matches[1]));
+
             try {
                 $homeTeamTotalGoalsScored = $this->soccerwayProcessor->getTeamStats($homeTeam, SoccerwayProcessor::HOME_TEAM_GOALS_FOR);
                 $homeTeamTotalGamesPlayed = $this->soccerwayProcessor->getTeamStats($homeTeam, SoccerwayProcessor::HOME_TEAM_MATCH_PLAYED);
@@ -67,6 +68,7 @@ class PoissonAlgorithmOddsConverter {
                 $teamsHomeGoalsScored = $this->soccerwayProcessor->getTeamGoalsScored(SoccerwayProcessor::HOME_TEAM_GOALS_FOR);
                 $teamsAwayGoalsScored = $this->soccerwayProcessor->getTeamGoalsScored(SoccerwayProcessor::AWAY_TEAM_GOALS_FOR);
             } catch (\Exception $ex) {
+                var_dump($ex->getMessage());
                 continue;
             }
 

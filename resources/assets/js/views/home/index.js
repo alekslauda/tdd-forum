@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
   $('#loadCountriesWithCompetitions').click(function(e){
+
     $('#loadCountriesWithCompetitions').off();
       $.ajax({
         url: '/competition-countries',
