@@ -36,7 +36,9 @@ $(document).ready(function(){
           url: '/competition-build',
           data: { parentLink: valueSelected },
           beforeSend: function() {
-            $('#countries').after('<div class="loader"></div>');
+            if ( !$('.loader').length) {
+              $('#countries').after('<div class="loader"></div>');
+            }
             if ($('#competitions').length) {
               $('#competitions').attr('disabled', 'disabled');
             }
