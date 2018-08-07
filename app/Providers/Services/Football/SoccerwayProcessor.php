@@ -22,6 +22,8 @@ class SoccerwayProcessor
     const EXTRACT_TODAY_HOME_TEAM = 2;
     const EXTRACT_TODAY_AWAY_TEAM = 4;
 
+    const TIMEZONE = 'Europe/Sofia';
+
     protected $soccerwayCompetitionUrl;
 
     protected $matches;
@@ -69,13 +71,25 @@ class SoccerwayProcessor
     {
         $teamNames = array_column($this->data, 2);
         $pos = false;
+
         foreach($teamNames as $k => $name) {
-//            if(mb_substr(mb_strtolower($name), 0, 5) === mb_substr(mb_strtolower($team), 0, 5)) {
-            if($name === $team) {
+
+            $dots = strpos($name, '…');
+            $removeDotsName = str_replace('…', '', $name);
+
+            if( $dots !== false) {
+
+                if(mb_substr(mb_strtolower($team), 0, 5) === mb_substr(mb_strtolower($removeDotsName), 0, 5)) {
+                    $team = (mb_substr($team, 0, -(mb_strlen($team)-$dots)));
+                }
+
+            }
+
+            if($removeDotsName === $team) {
                 $pos = $k;
             }
-        }
 
+        }
         if( $pos === false ) {
             throw new TeamNotFound('Please provide correct data. Team: ' . $team . ' not found.');
         }
@@ -141,8 +155,6 @@ class SoccerwayProcessor
         $crawler2->clear();
         $crawler2->addHtmlContent($html);
 
-
-
         $table = $crawler2->filter('#page_competition_1_block_competition_tables_7_block_competition_wide_table_1_table')->filter('tr')->each(function ($tr, $i) {
             return $tr->filter('td')->each(function ($td, $i) {
                 return trim($td->text());
@@ -155,7 +167,7 @@ class SoccerwayProcessor
 
     protected function buildTodayMatches($crawler)
     {
-        $todayDate = Carbon::today();
+        $todayDate = Carbon::today(static::TIMEZONE);
 
         $table = $crawler->filter('#page_competition_1_block_competition_matches_summary_5')->filter('tr')->each(function ($tr, $i) {
             return $tr->filter('td')->each(function ($td, $i) {
@@ -169,7 +181,7 @@ class SoccerwayProcessor
         foreach($table as $games) {
 
             $gameDate = Carbon::createFromFormat('d/m/y' ,$games[self::EXTRACT_TODAY_DATE]);
-            $parsedGameDate = Carbon::parse($gameDate->format('Y-m-d'));
+            $parsedGameDate = Carbon::parse($gameDate->format('Y-m-d'), static::TIMEZONE);
 
             if ($todayDate->eq($parsedGameDate)) {
                 $this->matches[] = [$games[self::EXTRACT_TODAY_HOME_TEAM], $games[self::EXTRACT_TODAY_AWAY_TEAM]];
