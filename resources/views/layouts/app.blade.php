@@ -25,6 +25,56 @@
         tr.table-success {
             background-color: lightgreen;
         }
+
+        td.row-background-color {
+            background-color: lightgreen;
+        }
+
+        .back-to-top {
+            cursor: pointer;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display:none;
+        }
+
+        .back-to-down {
+            cursor: pointer;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display:none;
+        }
+
+        .loader {
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+
+        .float-right {
+            float: right
+        }
+
+        .float-left {
+            float: left
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 
 </head>
@@ -36,6 +86,17 @@
 </div>
 
 <!-- Scripts -->
-<script src="{{ asset('js/app.js') }}"></script>
+
+
+@section('appScripts')
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+@show
+
+@yield('pageScripts')
+
 </body>
 </html>

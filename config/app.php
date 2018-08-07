@@ -13,6 +13,8 @@ return [
     |
     */
 
+    'SOCCERWAY_URL' => 'https://int.soccerway.com/',
+
     'name' => env('APP_NAME', 'Forum'),
 
     /*
