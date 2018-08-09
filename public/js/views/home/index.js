@@ -78,7 +78,9 @@ module.exports = __webpack_require__(44);
 
 $(document).ready(function () {
 
-  $('#loadCountriesWithCompetitions').click(function () {
+  $('#loadCountriesWithCompetitions').click(function (e) {
+
+    $('#loadCountriesWithCompetitions').off();
     $.ajax({
       url: '/competition-countries',
       beforeSend: function beforeSend() {
@@ -109,7 +111,9 @@ $(document).ready(function () {
       url: '/competition-build',
       data: { parentLink: valueSelected },
       beforeSend: function beforeSend() {
-        $('#countries').after('<div class="loader"></div>');
+        if (!$('.loader').length) {
+          $('#countries').after('<div class="loader"></div>');
+        }
         if ($('#competitions').length) {
           $('#competitions').attr('disabled', 'disabled');
         }
@@ -234,7 +238,7 @@ $(document).ready(function () {
   $('#back-to-down').click(function () {
     $('#back-to-down').tooltip('hide');
     $('body,html').animate({
-      scrollTop: $(document).height() - $(window).height()
+      scrollTop: $(document).height()
     }, 800);
     return false;
   });
