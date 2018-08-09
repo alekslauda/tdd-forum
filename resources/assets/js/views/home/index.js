@@ -178,7 +178,7 @@ $(document).ready(function(){
   $('#back-to-down').click(function () {
     $('#back-to-down').tooltip('hide');
     $('body,html').animate({
-      scrollTop: $(document).height()-$(window).height()
+      scrollTop: $(document).height()
     }, 800);
     return false;
   });
