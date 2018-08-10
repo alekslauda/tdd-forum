@@ -38,6 +38,11 @@
             display:none;
         }
 
+        .progress-bar {
+            min-width: 35%;
+            max-width: 65%;
+        }
+
         .back-to-down {
             cursor: pointer;
             position: fixed;
