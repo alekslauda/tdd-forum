@@ -135,13 +135,27 @@ class SoccerwayProcessor
 
         $crawler2 = $this->client->request('GET', \Config::get('app.SOCCERWAY_URL') . $getPastYearLink);
         $crawler2->filter('#page_competition_1_block_competition_playerstats_8-wrapper + script')->each(function($node) use(&$queryParams, $season_id){
-            $params = $this->extractJSON($node->text());
+
+        /**
+            strange bug
+
+         * $params = $this->extractJSON($node->text());
 
             if( !$params) {
                 throw new \Exception('Try again');
+             }
+         */
+
+            $g = trim($node->text());
+            $start = strpos($g, '"round_id"');
+            $end = strpos($g, '});');
+            $find = substr($g, $start, $end-$start);
+            $obj = json_decode('{' . $find .'}');
+            if( !$obj) {
+                throw new \Exception('Try again');
             }
 
-            $parsed = json_decode($params[0]);
+            $parsed = $obj;
             $parsed->season_id = $season_id;
             $parsed->outgroup = "";
             $parsed->view = "";

@@ -32,12 +32,14 @@ class HomeController extends Controller
             $this->validate($request, [
                 'competitions' => 'required'
             ]);
-            $competitionUrl = $request->input('competitions');
-            $soccerwayProcessor = new SoccerwayProcessor($competitionUrl);
-            $poisson = new PoissonAlgorithmOddsConverter($soccerwayProcessor);
-            $data = $poisson->generatePredictions();
+
             try {
-                $b = 5;
+
+                $competitionUrl = $request->input('competitions');
+                $soccerwayProcessor = new SoccerwayProcessor($competitionUrl);
+                $poisson = new PoissonAlgorithmOddsConverter($soccerwayProcessor);
+                $data = $poisson->generatePredictions();
+
             } catch (TeamNotFound $tex) {
                 \Log::error('System error: '. $tex->getMessage() . ' | Trace: ' . $tex->getTraceAsString());
                 $error = ValidationException::withMessages([
