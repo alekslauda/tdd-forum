@@ -201,6 +201,7 @@ class PoissonAlgorithmOddsConverter {
         GoalsFactory::addPrediction(new Standard(new Prediction($bothTeamToScorePrediction, 'Both Teams Can Score', Types::BOTH_TEAMS_CAN_SCORE)));
 
         $vincentStrategyPossibility = $this->calculateVincentGoalStrategy([$homeTeam, $awayTeam]);
+
         $vincentPrediction = null;
         if($vincentStrategyPossibility != 0) {
             $vincentPrediction = new Vincent2and5Strategy($vincentStrategyPossibility, '', Types::VINCENT_OVER_UNDER_2_5);

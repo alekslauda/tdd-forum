@@ -67,23 +67,23 @@ class SoccerwayProcessor
 
         $crawler = $this->client->request('GET', \Config::get('app.SOCCERWAY_URL') . $resultsUrl);
 
-        $homeTeam = $crawler->filter('#page_match_1_block_match_team_matches_14-wrapper')->filter('tr')->each(function ($tr, $i) {
+        $teams = $crawler->filter('.matches')->filter('tr')->each(function ($tr, $i) {
             return $tr->filter('td')->each(function ($td, $i) {
                 return trim($td->text());
             });
         });
 
-        $awayTeam = $crawler->filter('#page_match_1_block_match_team_matches_15-wrapper')->filter('tr')->each(function ($tr, $i) {
-            return $tr->filter('td')->each(function ($td, $i) {
-                return trim($td->text());
-            });
-        });
+        $splicePoints = [];
 
-        array_shift($homeTeam);array_shift($awayTeam);
+        foreach ($teams as $pos => $team) {
+            if( !$team) {
+                $splicePoints[] = $pos;
+            }
+        }
 
         return [
-            'homeTeam' => $homeTeam,
-            'awayTeam' => $awayTeam
+            'homeTeam' => array_slice($teams, $splicePoints[0]+1, $splicePoints[1]-1),
+            'awayTeam' => array_slice($teams, $splicePoints[1]+1, count($teams))
         ];
     }
 
