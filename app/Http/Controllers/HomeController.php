@@ -33,11 +33,11 @@ class HomeController extends Controller
                 'competitions' => 'required'
             ]);
             $competitionUrl = $request->input('competitions');
-
+            $soccerwayProcessor = new SoccerwayProcessor($competitionUrl);
+            $poisson = new PoissonAlgorithmOddsConverter($soccerwayProcessor);
+            $data = $poisson->generatePredictions();
             try {
-                $soccerwayProcessor = new SoccerwayProcessor($competitionUrl);
-                $poisson = new PoissonAlgorithmOddsConverter($soccerwayProcessor);
-                $data = $poisson->generatePredictions();
+                $b = 5;
             } catch (TeamNotFound $tex) {
                 \Log::error('System error: '. $tex->getMessage() . ' | Trace: ' . $tex->getTraceAsString());
                 $error = ValidationException::withMessages([

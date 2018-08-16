@@ -14,6 +14,8 @@ class Types
 
     const BOTH_TEAMS_CAN_SCORE = 'both.teams.can.score';
 
+    const VINCENT_OVER_UNDER_2_5 = 'vincent.goal.strategy';
+
     const OVER_1_5 = '1.5';
     const OVER_2_5 = '2.5';
     const OVER_3_5 = '3.5';

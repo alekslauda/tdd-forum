@@ -7,6 +7,7 @@ use App\Providers\Services\Football\Predictions\AwayWinOrDraw;
 use App\Providers\Services\Football\Predictions\Draw;
 use App\Providers\Services\Football\Predictions\Factories\GoalsFactory;
 use App\Providers\Services\Football\Predictions\Factories\SignFactory;
+use App\Providers\Services\Football\Predictions\Goals\Vincent2and5Strategy;
 use App\Providers\Services\Football\Predictions\HomeWin;
 use App\Providers\Services\Football\Predictions\HomeWinOrDraw;
 use App\Providers\Services\Football\Predictions\Over;
@@ -52,7 +53,10 @@ class PoissonAlgorithmOddsConverter {
     public function generatePredictions()
     {
         $predictions = [];
-        foreach($this->soccerwayProcessor->getMatches() as $gameNum => $matches) {
+        $gameNum = 0;
+        foreach($this->soccerwayProcessor->getMatches() as $t => $matches) {
+
+            $gameNum++;
 
             $homeTeam = trim(($matches[0]));
             $awayTeam = trim(($matches[1]));
@@ -134,6 +138,7 @@ class PoissonAlgorithmOddsConverter {
         $bothTeamToScorePrediction = 0;
 
         foreach($this->soccerwayProcessor->getResults() as $res) {
+
             $results = explode('-', $res);
             $homeTeamRes = (int) $results[0];
             $awayTeamRes = (int) $results[1];
@@ -189,18 +194,73 @@ class PoissonAlgorithmOddsConverter {
         SignFactory::addPrediction(new Prediction($homeWinPrediction + $drawPrediction, 'Home Win Or Draw', Types::HOME_WIN_OR_DRAW));
         SignFactory::addPrediction(new Prediction($awayWinPrediction + $drawPrediction, 'Away Win Or Draw', Types::AWAY_WIN_OR_DRAW));
 
-
         GoalsFactory::addPrediction(new Standard(new Prediction($over1and5Prediction, 'Over/Under 1.5', Types::OVER_1_5)));
         GoalsFactory::addPrediction(new Standard(new Prediction($over2and5Prediction, 'Over/Under 2.5', Types::OVER_2_5)));
         GoalsFactory::addPrediction(new Standard(new Prediction($over3and5Prediction, 'Over/Under 3.5', Types::OVER_3_5)));
         GoalsFactory::addPrediction(new Standard(new Prediction($over4and5Prediction, 'Over/Under 4.5', Types::OVER_4_5)));
         GoalsFactory::addPrediction(new Standard(new Prediction($bothTeamToScorePrediction, 'Both Teams Can Score', Types::BOTH_TEAMS_CAN_SCORE)));
 
+        $vincentStrategyPossibility = $this->calculateVincentGoalStrategy([$homeTeam, $awayTeam]);
+        $vincentPrediction = null;
+        if($vincentStrategyPossibility != 0) {
+            $vincentPrediction = new Vincent2and5Strategy($vincentStrategyPossibility, '', Types::VINCENT_OVER_UNDER_2_5);
+        }
+
         return [
             'Sign' => SignFactory::getAll(),
-            'Goals' => GoalsFactory::getAll()
+            'Goals' => GoalsFactory::getAll(),
+            'Vincent' => $vincentPrediction ? $vincentPrediction : null
         ];
     }
+
+    protected function calculateVincentGoalStrategy(array $teams) {
+
+        $results = $this->soccerwayProcessor->getTeamsLastMatches($teams);
+
+        if( !$results['homeTeam'] || !$results['awayTeam']) {
+            return [];
+        }
+
+        $sum = 0;
+
+        krsort($results['homeTeam']);
+        krsort($results['awayTeam']);
+
+        foreach($results as $team => $item) {
+            // 4 is the key for the result
+            $maxMatches = 0;
+            foreach (array_column($item, 4) as $result) {
+
+                $res = explode('-', $result);
+
+                if (count($res) !== 2 || $maxMatches == 4) {
+                    continue;
+                }
+
+                $maxMatches++;
+                $homeRes = (int) trim($res[0]);
+                $awayRes = (int) trim($res[1]);
+
+                if ($homeRes + $awayRes > 2.5) {
+                    $sum += +0.5;
+                } else {
+                    $sum += -0.5;
+                }
+
+                if ($homeRes + $awayRes > 2.5 && $homeRes > 0 && $awayRes > 0) {
+                    $sum += +0.75;
+                }
+
+                if ($homeRes == 0 || $awayRes == 0) {
+                    $sum += -0.75;
+                }
+            }
+        }
+
+        return $sum;
+
+    }
+
 
     protected function correctScorePredictor($fixture1, $fixture2)
     {
