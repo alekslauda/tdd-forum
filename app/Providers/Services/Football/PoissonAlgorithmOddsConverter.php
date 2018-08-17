@@ -131,6 +131,7 @@ class PoissonAlgorithmOddsConverter {
         $homeWinPrediction = 0;
         $awayWinPrediction = 0;
         $drawPrediction = 0;
+        $over0and5Prediction = 0;
         $over1and5Prediction = 0;
         $over2and5Prediction = 0;
         $over3and5Prediction = 0;
@@ -180,6 +181,11 @@ class PoissonAlgorithmOddsConverter {
                 $over1and5Prediction += $converts[0] * $converts[1];
             }
 
+            if (($homeTeamRes + $awayTeamRes) > 0.5) {
+                $converts = $this->convert($prediction[$homeTeam][$homeTeamRes], $prediction[$awayTeam][$awayTeamRes]);
+                $over0and5Prediction += $converts[0] * $converts[1];
+            }
+
             if ($homeTeamRes > 0 && $awayTeamRes > 0) {
                 $converts = $this->convert($prediction[$homeTeam][$homeTeamRes], $prediction[$awayTeam][$awayTeamRes]);
                 $bothTeamToScorePrediction += $converts[0] * $converts[1];
@@ -194,6 +200,7 @@ class PoissonAlgorithmOddsConverter {
         SignFactory::addPrediction(new Prediction($homeWinPrediction + $drawPrediction, 'Home Win Or Draw', Types::HOME_WIN_OR_DRAW));
         SignFactory::addPrediction(new Prediction($awayWinPrediction + $drawPrediction, 'Away Win Or Draw', Types::AWAY_WIN_OR_DRAW));
 
+        GoalsFactory::addPrediction(new Standard(new Prediction($over0and5Prediction, 'Over/Under 0.5', Types::OVER_0_5)));
         GoalsFactory::addPrediction(new Standard(new Prediction($over1and5Prediction, 'Over/Under 1.5', Types::OVER_1_5)));
         GoalsFactory::addPrediction(new Standard(new Prediction($over2and5Prediction, 'Over/Under 2.5', Types::OVER_2_5)));
         GoalsFactory::addPrediction(new Standard(new Prediction($over3and5Prediction, 'Over/Under 3.5', Types::OVER_3_5)));
