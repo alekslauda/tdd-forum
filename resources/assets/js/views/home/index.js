@@ -130,7 +130,7 @@ $(document).ready(function(){
 
     })
 
-    $('.progress-bar').click(function(e) {
+    $('.progress-bar:not(.vincent)').click(function(e) {
 
         let probability = $(e.target).text().trim();
         if( !$('#valueBetCalculatorContainer').find('form').hasClass('hidden')) {

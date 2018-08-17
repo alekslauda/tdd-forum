@@ -90,7 +90,7 @@
                                     <div class="panel-heading">{{ $v['beatTheBookie']['Vincent']->subTitle() }}</div>
                                     <div class="panel-body">
                                         <div class="progress">
-                                            <div class="progress-bar " role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Vincent']->getPercentage() }}%;">
+                                            <div class="progress-bar vincent" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Vincent']->getPercentage() }}%;">
                                                 {{ $v['beatTheBookie']['Vincent']->getPercentage() }}%
                                             </div>
                                         </div>
