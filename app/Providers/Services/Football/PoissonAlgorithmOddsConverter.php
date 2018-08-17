@@ -229,16 +229,16 @@ class PoissonAlgorithmOddsConverter {
 
         foreach($results as $team => $item) {
             // 4 is the key for the result
-            $maxMatches = 0;
-            foreach (array_column($item, 4) as $result) {
+            $matches = array_column($item, 4);
+            $lastMatches = array_slice($matches, -5);
 
+            foreach ($lastMatches as $result) {
                 $res = explode('-', $result);
 
-                if (count($res) !== 2 || $maxMatches == 4) {
+                if (count($res) !== 2) {
                     continue;
                 }
 
-                $maxMatches++;
                 $homeRes = (int) trim($res[0]);
                 $awayRes = (int) trim($res[1]);
 
@@ -259,7 +259,6 @@ class PoissonAlgorithmOddsConverter {
         }
 
         return $sum;
-
     }
 
 
