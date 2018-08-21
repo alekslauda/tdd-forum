@@ -226,7 +226,7 @@ class PoissonAlgorithmOddsConverter {
         $results = $this->soccerwayProcessor->getTeamsLastMatches($teams);
 
         if( !$results['homeTeam'] || !$results['awayTeam']) {
-            return [];
+            return 0;
         }
 
         $sum = 0;

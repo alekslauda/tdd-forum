@@ -81,10 +81,20 @@ class SoccerwayProcessor
             }
         }
 
-        return [
-            'homeTeam' => array_slice($teams, $splicePoints[0]+1, $splicePoints[1]-1),
-            'awayTeam' => array_slice($teams, $splicePoints[1]+1, count($teams))
+        $data = [
+            'homeTeam' => [],
+            'awayTeam' => []
         ];
+
+        if ($splicePoints) {
+            $data = [
+                'homeTeam' => array_slice($teams, $splicePoints[1]+1, count($teams)),
+                'awayTeam' => array_slice($teams, $splicePoints[0]+1, $splicePoints[1]-1)
+            ];
+        }
+
+        return $data;
+
     }
 
     public function getTeamGoalsScored($team = self::HOME_TEAM_GOALS_FOR)
