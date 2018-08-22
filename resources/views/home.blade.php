@@ -56,16 +56,55 @@
                         <div class="panel-body">
 
                             @foreach($v['beatTheBookie']['Goals'] as $goalsPrediction)
+
+                                @php
+                                /**
+                                    $pred = 'Over - ' . $goalsPrediction->getPercentage() .'%';
+                                    $predOpp = 'Under - ' . $goalsPrediction->opposite()->getPercentage() .'%';
+                                    if ($goalsPrediction->getId() == \App\Providers\Services\Football\Predictions\Types::BOTH_TEAMS_CAN_SCORE) {
+                                        $pred = 'Yes - ' . $goalsPrediction->getPercentage() .'%';
+                                        $predOpp = 'No - ' . $goalsPrediction->opposite()->getPercentage() .'%';
+                                    }
+                                **/
+                                    $pred = 'Over';
+                                    $predOpp = 'Under';
+                                    if ($goalsPrediction->getId() == \App\Providers\Services\Football\Predictions\Types::BOTH_TEAMS_CAN_SCORE) {
+                                        $pred = 'Yes';
+                                        $predOpp = 'No';
+                                    }
+                                @endphp
+
                                 <div class="col-md-4">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">{{ $goalsPrediction->getTitle() }}</div>
                                         <div class="panel-body">
-                                            <div class="progress">
-                                                <div class="progress-bar {{ $goalsPrediction->getPercentage() > $goalsPrediction->opposite()->getPercentage() ? 'progress-bar-success' : 'progress-bar-danger' }}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $goalsPrediction->getPercentage() }}%;">
-                                                    {{ $goalsPrediction->getPercentage() }}%
+                                            <div class="progress progress-goals">
+
+                                                <div class="progress-bar progress-bar-goals {{ $goalsPrediction->getPercentage() > $goalsPrediction->opposite()->getPercentage() ? 'progress-bar-success' : 'progress-bar-danger' }}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $goalsPrediction->getPercentage() }}%;">
+                                                    <div class="row">
+                                                        <div class="col-md-5"></div>
+                                                        <div class="col-md-7">
+                                                            <div class="row">
+                                                                <span class="percentage">{{ $goalsPrediction->getPercentage() }}%</span>
+                                                            </div>
+                                                            <div class="row">
+                                                                <span class="type"><strong>{{ $pred }}</strong></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="progress-bar {{ $goalsPrediction->getPercentage() > $goalsPrediction->opposite()->getPercentage() ? 'progress-bar-danger' : 'progress-bar-success' }} " role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $goalsPrediction->opposite()->getPercentage() }}%;">
-                                                    {{ $goalsPrediction->opposite()->getPercentage() }}%
+                                                <div class="progress-bar progress-bar-goals {{ $goalsPrediction->getPercentage() > $goalsPrediction->opposite()->getPercentage() ? 'progress-bar-danger' : 'progress-bar-success' }} " role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $goalsPrediction->opposite()->getPercentage() }}%;">
+                                                    <div class="row">
+                                                        <div class="col-md-5"></div>
+                                                        <div class="col-md-7">
+                                                            <div class="row">
+                                                                <span class="percentage">{{ $goalsPrediction->opposite()->getPercentage() }}%</span>
+                                                            </div>
+                                                            <div class="row">
+                                                                <span class="type"><strong>{{ $predOpp }}</strong></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div>

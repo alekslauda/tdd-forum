@@ -43,6 +43,20 @@
             max-width: 65%;
         }
 
+        .progress-bar-goals {
+            text-align: left;
+        }
+
+        .percentage {
+            border-bottom: 1px solid;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .progress-goals {
+            height: 50px;
+        }
+
         .back-to-down {
             cursor: pointer;
             position: fixed;
