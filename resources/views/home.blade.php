@@ -34,7 +34,7 @@
                             @foreach($v['beatTheBookie']['Sign'] as $prediction)
                                 <div class="col-md-4">
                                     <div class="panel panel-default">
-                                        <div class="panel-heading">{{ $prediction->getTitle() }}</div>
+                                        <div class="panel-heading text-center">{{ $prediction->getTitle() }}</div>
                                         <div class="panel-body">
                                             <div class="progress">
                                                 <div class="progress-bar " role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $prediction->getPercentage() }}%;">
@@ -68,7 +68,7 @@
 
                                 <div class="col-md-4">
                                     <div class="panel panel-default">
-                                        <div class="panel-heading">{{ $goalsPrediction->getTitle() }}</div>
+                                        <div class="panel-heading text-center">{{ $goalsPrediction->getTitle() }}</div>
                                         <div class="panel-body">
                                             <div class="progress progress-goals">
 
