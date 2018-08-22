@@ -190,7 +190,7 @@ $(document).ready(function () {
     }
   });
 
-  $('.progress-bar:not(.vincent)').click(function (e) {
+  $('.percentage:not(.vincent)').click(function (e) {
 
     var probability = $(e.target).text().trim();
     if (!$('#valueBetCalculatorContainer').find('form').hasClass('hidden')) {

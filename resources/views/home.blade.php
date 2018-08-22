@@ -38,7 +38,7 @@
                                         <div class="panel-body">
                                             <div class="progress">
                                                 <div class="progress-bar " role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $prediction->getPercentage() }}%;">
-                                                    {{ $prediction->getPercentage() }}%
+                                                    <span class="percentage">{{ $prediction->getPercentage() }}%</span>
                                                 </div>
                                             </div>
                                             <span>Odds:  {{ $prediction->getOdds() }}</span>
@@ -58,14 +58,6 @@
                             @foreach($v['beatTheBookie']['Goals'] as $goalsPrediction)
 
                                 @php
-                                /**
-                                    $pred = 'Over - ' . $goalsPrediction->getPercentage() .'%';
-                                    $predOpp = 'Under - ' . $goalsPrediction->opposite()->getPercentage() .'%';
-                                    if ($goalsPrediction->getId() == \App\Providers\Services\Football\Predictions\Types::BOTH_TEAMS_CAN_SCORE) {
-                                        $pred = 'Yes - ' . $goalsPrediction->getPercentage() .'%';
-                                        $predOpp = 'No - ' . $goalsPrediction->opposite()->getPercentage() .'%';
-                                    }
-                                **/
                                     $pred = 'Over';
                                     $predOpp = 'Under';
                                     if ($goalsPrediction->getId() == \App\Providers\Services\Football\Predictions\Types::BOTH_TEAMS_CAN_SCORE) {
