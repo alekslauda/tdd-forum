@@ -111,27 +111,34 @@
                     </div>
 
                     @if($v['beatTheBookie']['Vincent'])
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Vincent 2.5 Goals Strategy</div>
-                        <div class="panel-body">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Vincent 2.5 Goals Strategy</div>
+                            <div class="panel-body">
+                                @foreach($v['beatTheBookie']['Vincent'] as $type => $strategy)
 
-                            <div class="col-md-4">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading"><strong>{{ $v['beatTheBookie']['Vincent']->getTitle() }}</strong></div>
-                                    <div class="panel-heading">{{ $v['beatTheBookie']['Vincent']->subTitle() }}</div>
-                                    <div class="panel-body">
-                                        <div class="progress">
-                                            <div class="progress-bar vincent" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Vincent']->getPercentage() }}%;">
-                                                {{ $v['beatTheBookie']['Vincent']->getPercentage() }}%
+                                        @if($strategy)
+                                        <div class="col-md-4">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading"><strong>{{ $type }}</strong></div>
+                                                <div class="panel-heading"><strong>{{ $strategy->getTitle() }}</strong></div>
+                                                {{--<div class="panel-heading"></div>--}}
+                                                <div class="panel-body">
+                                                    <div class="progress">
+                                                        <div class="progress-bar vincent" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $strategy->getPercentage() }}%;">
+                                                            {{ $strategy->getPercentage() }}%
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-heading">{{ $strategy->subTitle() }}</div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
+                                        @endif
 
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
                     @endif
+
                 </div>
             @endforeach
         </div>

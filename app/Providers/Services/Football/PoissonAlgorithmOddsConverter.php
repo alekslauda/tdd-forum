@@ -21,7 +21,9 @@ class NoPredictionsWrongFileData extends \Exception {}
 
 
 class PoissonAlgorithmOddsConverter {
-
+    /**
+     * @var \App\Providers\Services\Football\SoccerwayProcessor
+     */
     protected $soccerwayProcessor;
 
     const BET_AMOUNT = 10;
@@ -208,17 +210,61 @@ class PoissonAlgorithmOddsConverter {
         GoalsFactory::addPrediction(new Standard(new Prediction($bothTeamToScorePrediction, 'Both Teams Can Score', Types::BOTH_TEAMS_CAN_SCORE)));
 
         $vincentStrategyPossibility = $this->calculateVincentGoalStrategy([$homeTeam, $awayTeam]);
+        $vincentStrategyPossibilityH2H = $this->calculateVincentGoalStrategyH2H([$homeTeam, $awayTeam]);
 
-        $vincentPrediction = null;
+        $vincent = [];
         if($vincentStrategyPossibility != 0) {
-            $vincentPrediction = new Vincent2and5Strategy($vincentStrategyPossibility, '', Types::VINCENT_OVER_UNDER_2_5);
+            $vincent['Standard'] = new Vincent2and5Strategy($vincentStrategyPossibility, '', Types::VINCENT_OVER_UNDER_2_5);
+        }
+
+        $vincentPredictionH2H = null;
+        if($vincentStrategyPossibilityH2H != 0) {
+            $vincent['H2H'] = new Vincent2and5Strategy($vincentStrategyPossibilityH2H, '', Types::VINCENT_OVER_UNDER_2_5);
         }
 
         return [
             'Sign' => SignFactory::getAll(),
             'Goals' => GoalsFactory::getAll(),
-            'Vincent' => $vincentPrediction ? $vincentPrediction : null
+            'Vincent' => $vincent
         ];
+    }
+
+    protected function calculateVincentGoalStrategyH2H(array $teams)
+    {
+        $sum = 0;
+
+        $teams = $this->soccerwayProcessor->getH2HMatches($teams);
+
+        if ( !$teams) {
+            return [];
+        }
+
+        $results = array_column($teams, 4);
+        foreach($results as $result) {
+            $res = explode('-', $result);
+
+            if (count($res) !== 2) {
+                continue;
+            }
+
+            $homeRes = (int) trim($res[0]);
+            $awayRes = (int) trim($res[1]);
+
+            if ($homeRes + $awayRes > 2.5) {
+                $sum += +0.5;
+            } else {
+                $sum += -0.5;
+            }
+
+            if ($homeRes + $awayRes > 2.5 && $homeRes > 0 && $awayRes > 0) {
+                $sum += +0.75;
+            }
+
+            if ($homeRes == 0 || $awayRes == 0) {
+                $sum += -0.75;
+            }
+        }
+        return $sum;
     }
 
     protected function calculateVincentGoalStrategy(array $teams) {
@@ -229,10 +275,10 @@ class PoissonAlgorithmOddsConverter {
             return 0;
         }
 
-        $sum = 0;
-
         krsort($results['homeTeam']);
         krsort($results['awayTeam']);
+
+        $sum = 0;
 
         foreach($results as $team => $item) {
             // 4 is the key for the result

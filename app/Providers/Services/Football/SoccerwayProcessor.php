@@ -58,6 +58,30 @@ class SoccerwayProcessor
         return $this->data;
     }
 
+    public function getH2HMatches(array $teams)
+    {
+        $resultsUrl = isset($this->matches[implode('-', $teams)]) ?  $this->matches[implode('-', $teams)]['link'] : null;
+        if ( !$resultsUrl) {
+            return [];
+        }
+
+        $crawler = $this->client->request('GET', \Config::get('app.SOCCERWAY_URL') . $resultsUrl . 'head2head');
+
+        $teamsH2H = $crawler->filter('#page_match_1_block_h2hsection_head2head_6_block_h2h_matches_1')->filter('tr')->each(function ($tr, $i) {
+            return $tr->filter('td')->each(function ($td, $i) {
+                return trim($td->text());
+            });
+        });
+
+        array_shift($teamsH2H);
+
+        if (count($teamsH2H) < 4) {
+            return [];
+        }
+
+        return $teamsH2H;
+    }
+
     public function getTeamsLastMatches(array $teams)
     {
         $resultsUrl = isset($this->matches[implode('-', $teams)]) ?  $this->matches[implode('-', $teams)]['link'] : null;
