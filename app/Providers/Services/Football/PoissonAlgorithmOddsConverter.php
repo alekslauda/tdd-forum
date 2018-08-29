@@ -236,7 +236,7 @@ class PoissonAlgorithmOddsConverter {
         $teams = $this->soccerwayProcessor->getH2HMatches($teams);
 
         if ( !$teams) {
-            return [];
+            return 0;
         }
 
         $results = array_column($teams, 4);
