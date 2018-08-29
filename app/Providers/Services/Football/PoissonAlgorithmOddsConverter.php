@@ -217,7 +217,6 @@ class PoissonAlgorithmOddsConverter {
             $vincent['Standard'] = new Vincent2and5Strategy($vincentStrategyPossibility, '', Types::VINCENT_OVER_UNDER_2_5);
         }
 
-        $vincentPredictionH2H = null;
         if($vincentStrategyPossibilityH2H != 0) {
             $vincent['H2H'] = new Vincent2and5Strategy($vincentStrategyPossibilityH2H, '', Types::VINCENT_OVER_UNDER_2_5);
         }
