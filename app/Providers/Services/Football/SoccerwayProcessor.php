@@ -97,6 +97,12 @@ class SoccerwayProcessor
             });
         });
 
+        $teamIds = [];
+        $crawler->filter('.thick > a')->each(function ($a) use (&$teamIds){
+           $teams = explode('/', $a->attr('href'));
+           $teamIds[] = $teams[count($teams)-2];
+        });
+
         $splicePoints = [];
 
         foreach ($teams as $pos => $team) {
@@ -112,8 +118,9 @@ class SoccerwayProcessor
 
         if ($splicePoints) {
             $data = [
-                'homeTeam' => array_slice($teams, $splicePoints[1]+1, count($teams)),
-                'awayTeam' => array_slice($teams, $splicePoints[0]+1, $splicePoints[1]-1)
+                'teamIds' => $teamIds,
+                'homeTeam' => array_slice($teams, $splicePoints[0]+1, $splicePoints[1]-1),
+                'awayTeam' => array_slice($teams, $splicePoints[1]+1, count($teams)),
             ];
         }
 
@@ -148,6 +155,11 @@ class SoccerwayProcessor
         }
 
         return (int) $this->data[$pos][$option];
+    }
+
+    public function getClient()
+    {
+        return $this->client;
     }
 
     protected function buildData()

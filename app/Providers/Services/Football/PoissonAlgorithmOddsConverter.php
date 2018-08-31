@@ -14,6 +14,8 @@ use App\Providers\Services\Football\Predictions\Over;
 use App\Providers\Services\Football\Predictions\Prediction;
 use App\Providers\Services\Football\Predictions\Goals\Standard;
 use App\Providers\Services\Football\Predictions\Types;
+use Carbon\Carbon;
+use Symfony\Component\DomCrawler\Crawler;
 
 class TeamNotFound extends \Exception {}
 
@@ -269,6 +271,116 @@ class PoissonAlgorithmOddsConverter {
     protected function calculateVincentGoalStrategy(array $teams) {
 
         $results = $this->soccerwayProcessor->getTeamsLastMatches($teams);
+
+        $homeUrl = 'https://int.soccerway.com/a/block_match_team_matches?'.http_build_query([
+                'block_id' => 'page_match_1_block_match_team_matches_14',
+                'callback_params' => '{"page":"0","block_service_id":"match_summary_block_matchteammatches","team_id":" '.$results['teamIds'][0].' ","competition_id":"0","filter":"home","new_design":""}',
+                'action' => 'filterMatches',
+                'params' => '{"filter":"home"}'
+        ]);
+
+        $awayUrl = 'https://int.soccerway.com/a/block_match_team_matches?'.http_build_query([
+                'block_id' => 'page_match_1_block_match_team_matches_14',
+                'callback_params' => '{"page":"0","block_service_id":"match_summary_block_matchteammatches","team_id":" '.$results['teamIds'][1].' ","competition_id":"0","filter":"away","new_design":""}',
+                'action' => 'filterMatches',
+                'params' => '{"filter":"away"}'
+            ]);
+
+        $_h = curl_init();
+        curl_setopt($_h, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($_h, CURLOPT_HTTPGET, 1);
+        curl_setopt($_h, CURLOPT_URL, $homeUrl);
+        curl_setopt($_h, CURLOPT_DNS_CACHE_TIMEOUT, 2 );
+
+        $data = curl_exec($_h);
+        curl_close($_h);
+
+        $soccerwayDataLastHomeMatches = json_decode($data, true);
+        $homeHtml = $soccerwayDataLastHomeMatches['commands'][0]['parameters']['content'];
+
+        $crawler = new Crawler();
+
+        $crawler->addHtmlContent($homeHtml);
+        $table1 = $crawler->filter('.matches')->filter('tr')->each(function ($tr, $i) {
+            return $tr->filter('td')->each(function ($td, $i) {
+                return trim($td->text());
+            });
+        });
+
+        $_a = curl_init();
+        curl_setopt($_a, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($_a, CURLOPT_HTTPGET, 1);
+        curl_setopt($_a, CURLOPT_URL, $awayUrl);
+        curl_setopt($_a, CURLOPT_DNS_CACHE_TIMEOUT, 2 );
+
+        $data = curl_exec($_a);
+        curl_close($_a);
+
+        $soccerwayDataLastAwayMatches = json_decode($data, true);
+        $awayHtml = $soccerwayDataLastAwayMatches['commands'][0]['parameters']['content'];
+
+        $crawler->clear();
+        $crawler->addHtmlContent($awayHtml);
+
+        $table2 = $crawler->filter('.matches')->filter('tr')->each(function ($tr, $i) {
+            return $tr->filter('td')->each(function ($td, $i) {
+                return trim($td->text());
+            });
+        });
+        krsort($table1);
+        krsort($table2);
+
+        echo '<pre>' . print_r($table2, true);
+
+        $over = false;
+        $countMatches = 3;
+        $score = 0;
+        $validGames = 0;
+        $awayValidGames = 0;
+        $previousGameCheck = false;
+        $previousGame = 1;
+        foreach($table2 as $homeTeamStats) {
+            try {
+                $todayDate = Carbon::today(SoccerwayProcessor::TIMEZONE);
+                $gameDate = Carbon::createFromFormat('d/m/y', $homeTeamStats[1]);
+            } catch(\Exception $ex) {
+                continue;
+            }
+
+            if($gameDate->gt($todayDate)) {
+                continue;
+            }
+
+            if($previousGame == 1) {
+                $previousGameCheck = array_sum(explode('-', $homeTeamStats[4])) >= 2;
+            }
+
+            $previousGame--;
+
+            if($countMatches > 0) {
+                $res = explode('-', $homeTeamStats[4]);
+                $resSum = array_sum($res);
+                if($resSum > 2.5) {
+                    $validGames++;
+                }
+                $score += $resSum;
+
+
+                //additional checks for the away team
+                if($res[1] > 0) {
+                    $awayValidGames++;
+                }
+            }
+            $countMatches--;
+        }
+
+        dd($score >7, $validGames >=2,  $previousGameCheck, $awayValidGames >= 2);
+
+        if ($score > 7 && $validGames >= 2) {
+            $over = true;
+        }
+
+        dd($over);
 
         if( !$results['homeTeam'] || !$results['awayTeam']) {
             return 0;
