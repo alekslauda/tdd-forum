@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Providers\Services\Football;
 
 
@@ -17,12 +18,17 @@ use App\Providers\Services\Football\Predictions\Types;
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
 
-class TeamNotFound extends \Exception {}
+class TeamNotFound extends \Exception
+{
+}
 
-class NoPredictionsWrongFileData extends \Exception {}
+class NoPredictionsWrongFileData extends \Exception
+{
+}
 
 
-class PoissonAlgorithmOddsConverter {
+class PoissonAlgorithmOddsConverter
+{
     /**
      * @var \App\Providers\Services\Football\SoccerwayProcessor
      */
@@ -30,7 +36,8 @@ class PoissonAlgorithmOddsConverter {
 
     const BET_AMOUNT = 10;
 
-    public function __construct($soccerwayProcessor) {
+    public function __construct($soccerwayProcessor)
+    {
         $this->soccerwayProcessor = $soccerwayProcessor;
     }
 
@@ -39,7 +46,7 @@ class PoissonAlgorithmOddsConverter {
         if ($number < 2) {
             return 1;
         } else {
-            return ($number * $this->factorial($number-1));
+            return ($number * $this->factorial($number - 1));
         }
     }
 
@@ -48,7 +55,7 @@ class PoissonAlgorithmOddsConverter {
         $e = exp(1);
 
         $a = pow($e, (-1 * $chance));
-        $b = pow($chance,$occurrence);
+        $b = pow($chance, $occurrence);
         $c = $this->factorial($occurrence);
 
         return $a * $b / $c;
@@ -58,7 +65,7 @@ class PoissonAlgorithmOddsConverter {
     {
         $predictions = [];
         $gameNum = 0;
-        foreach($this->soccerwayProcessor->getMatches() as $t => $matches) {
+        foreach ($this->soccerwayProcessor->getMatches() as $t => $matches) {
 
             $gameNum++;
 
@@ -88,18 +95,18 @@ class PoissonAlgorithmOddsConverter {
             $AVG_HOME = $teamsHomeGoalsScored / $teamsTotalGamesPlayed;
             $AVG_AWAY = $teamsAwayGoalsScored / $teamsTotalGamesPlayed;
 
-            $homeTeamAttackStrength = (double) ($homeTeamTotalGoalsScored / $homeTeamTotalGamesPlayed / $seasonAverageHomeGoals);
-            $homeTeamDefenceStregnth = (double) ($homeTeamTotalGoalsConceded / $homeTeamTotalGamesPlayed / $seasonAverageAwayGoalsConceded);
+            $homeTeamAttackStrength = (double)($homeTeamTotalGoalsScored / $homeTeamTotalGamesPlayed / $seasonAverageHomeGoals);
+            $homeTeamDefenceStregnth = (double)($homeTeamTotalGoalsConceded / $homeTeamTotalGamesPlayed / $seasonAverageAwayGoalsConceded);
 
-            $awayTeamDefenceStrength = (double) ($awayTeamTotalGoalsConceded / $awayTeamTotalGamesPlayed / $seasonAverageHomeGoals);
+            $awayTeamDefenceStrength = (double)($awayTeamTotalGoalsConceded / $awayTeamTotalGamesPlayed / $seasonAverageHomeGoals);
             $awayTeamAttackStregnth = ($awayTeamTotalGoalsScored / $awayTeamTotalGamesPlayed / $seasonAverageAwayGoalsConceded);
 
-            $homeTeamGoalsProbability = (double) number_format($homeTeamAttackStrength * $awayTeamDefenceStrength * $AVG_HOME, 3);
-            $awayTeamGoalsProbability = (double) number_format($awayTeamAttackStregnth * $homeTeamDefenceStregnth * $AVG_AWAY, 3);
+            $homeTeamGoalsProbability = (double)number_format($homeTeamAttackStrength * $awayTeamDefenceStrength * $AVG_HOME, 3);
+            $awayTeamGoalsProbability = (double)number_format($awayTeamAttackStregnth * $homeTeamDefenceStregnth * $AVG_AWAY, 3);
 
-            foreach (range(0,SoccerwayProcessor::GOAL_OCCURANCES) as $occ => $v) {
-                $predictions[($gameNum + 1)][$homeTeam][$occ] =  number_format(($this->poisson($homeTeamGoalsProbability, $occ)*100),2);
-                $predictions[($gameNum + 1)][$awayTeam][$occ] =  number_format(($this->poisson($awayTeamGoalsProbability, $occ)*100),2);
+            foreach (range(0, SoccerwayProcessor::GOAL_OCCURANCES) as $occ => $v) {
+                $predictions[($gameNum + 1)][$homeTeam][$occ] = number_format(($this->poisson($homeTeamGoalsProbability, $occ) * 100), 2);
+                $predictions[($gameNum + 1)][$awayTeam][$occ] = number_format(($this->poisson($awayTeamGoalsProbability, $occ) * 100), 2);
             }
         }
 
@@ -108,7 +115,7 @@ class PoissonAlgorithmOddsConverter {
 
     protected function calculateOdds($predictions)
     {
-        if ( !$predictions)
+        if (!$predictions)
             throw new NoPredictionsWrongFileData('No data. No predictions');
 
 
@@ -142,11 +149,11 @@ class PoissonAlgorithmOddsConverter {
         $over4and5Prediction = 0;
         $bothTeamToScorePrediction = 0;
 
-        foreach($this->soccerwayProcessor->getResults() as $res) {
+        foreach ($this->soccerwayProcessor->getResults() as $res) {
 
             $results = explode('-', $res);
-            $homeTeamRes = (int) $results[0];
-            $awayTeamRes = (int) $results[1];
+            $homeTeamRes = (int)$results[0];
+            $awayTeamRes = (int)$results[1];
 
             $correctScore[$res] = $this->correctScorePredictor($prediction[$homeTeam][$homeTeamRes], $prediction[$awayTeam][$awayTeamRes]);
 
@@ -160,7 +167,7 @@ class PoissonAlgorithmOddsConverter {
                 $awayWinPrediction += $converts[0] * $converts[1];
             }
 
-            if($homeTeamRes === $awayTeamRes) {
+            if ($homeTeamRes === $awayTeamRes) {
                 $converts = $this->convert($prediction[$homeTeam][$homeTeamRes], $prediction[$awayTeam][$awayTeamRes]);
                 $drawPrediction += $converts[0] * $converts[1];
             }
@@ -211,22 +218,18 @@ class PoissonAlgorithmOddsConverter {
         GoalsFactory::addPrediction(new Standard(new Prediction($over4and5Prediction, 'Over/Under 4.5', Types::OVER_4_5)));
         GoalsFactory::addPrediction(new Standard(new Prediction($bothTeamToScorePrediction, 'Both Teams Can Score', Types::BOTH_TEAMS_CAN_SCORE)));
 
+
         $vincentStrategyPossibility = $this->calculateVincentGoalStrategy([$homeTeam, $awayTeam]);
-        $vincentStrategyPossibilityH2H = $this->calculateVincentGoalStrategyH2H([$homeTeam, $awayTeam]);
 
-        $vincent = [];
-        if($vincentStrategyPossibility != 0) {
-            $vincent['Standard'] = new Vincent2and5Strategy($vincentStrategyPossibility, '', Types::VINCENT_OVER_UNDER_2_5);
-        }
-
-        if($vincentStrategyPossibilityH2H != 0) {
-            $vincent['H2H'] = new Vincent2and5Strategy($vincentStrategyPossibilityH2H, '', Types::VINCENT_OVER_UNDER_2_5);
+        $vincent = null;
+        if ($vincentStrategyPossibility != 0) {
+            $vincent = new Vincent2and5Strategy($vincentStrategyPossibility, '', Types::VINCENT_OVER_UNDER_2_5);
         }
 
         return [
             'Sign' => SignFactory::getAll(),
             'Goals' => GoalsFactory::getAll(),
-            'Vincent' => $vincent
+            'Vincent' => $vincent ? $vincent : null,
         ];
     }
 
@@ -236,20 +239,20 @@ class PoissonAlgorithmOddsConverter {
 
         $teams = $this->soccerwayProcessor->getH2HMatches($teams);
 
-        if ( !$teams) {
+        if (!$teams) {
             return 0;
         }
 
         $results = array_column($teams, 4);
-        foreach($results as $result) {
+        foreach ($results as $result) {
             $res = explode('-', $result);
 
             if (count($res) !== 2) {
                 continue;
             }
 
-            $homeRes = (int) trim($res[0]);
-            $awayRes = (int) trim($res[1]);
+            $homeRes = (int)trim($res[0]);
+            $awayRes = (int)trim($res[1]);
 
             if ($homeRes + $awayRes > 2.5) {
                 $sum += +0.5;
@@ -268,20 +271,21 @@ class PoissonAlgorithmOddsConverter {
         return $sum;
     }
 
-    protected function calculateVincentGoalStrategy(array $teams) {
+    protected function calculateVincentGoalStrategy(array $teams)
+    {
 
         $results = $this->soccerwayProcessor->getTeamsLastMatches($teams);
 
-        $homeUrl = 'https://int.soccerway.com/a/block_match_team_matches?'.http_build_query([
+        $homeUrl = 'https://int.soccerway.com/a/block_match_team_matches?' . http_build_query([
                 'block_id' => 'page_match_1_block_match_team_matches_14',
-                'callback_params' => '{"page":"0","block_service_id":"match_summary_block_matchteammatches","team_id":" '.$results['teamIds'][0].' ","competition_id":"0","filter":"home","new_design":""}',
+                'callback_params' => '{"page":"0","block_service_id":"match_summary_block_matchteammatches","team_id":" ' . $results['teamIds'][0] . ' ","competition_id":"0","filter":"home","new_design":""}',
                 'action' => 'filterMatches',
                 'params' => '{"filter":"home"}'
-        ]);
+            ]);
 
-        $awayUrl = 'https://int.soccerway.com/a/block_match_team_matches?'.http_build_query([
+        $awayUrl = 'https://int.soccerway.com/a/block_match_team_matches?' . http_build_query([
                 'block_id' => 'page_match_1_block_match_team_matches_14',
-                'callback_params' => '{"page":"0","block_service_id":"match_summary_block_matchteammatches","team_id":" '.$results['teamIds'][1].' ","competition_id":"0","filter":"away","new_design":""}',
+                'callback_params' => '{"page":"0","block_service_id":"match_summary_block_matchteammatches","team_id":" ' . $results['teamIds'][1] . ' ","competition_id":"0","filter":"away","new_design":""}',
                 'action' => 'filterMatches',
                 'params' => '{"filter":"away"}'
             ]);
@@ -290,7 +294,7 @@ class PoissonAlgorithmOddsConverter {
         curl_setopt($_h, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($_h, CURLOPT_HTTPGET, 1);
         curl_setopt($_h, CURLOPT_URL, $homeUrl);
-        curl_setopt($_h, CURLOPT_DNS_CACHE_TIMEOUT, 2 );
+        curl_setopt($_h, CURLOPT_DNS_CACHE_TIMEOUT, 2);
 
         $data = curl_exec($_h);
         curl_close($_h);
@@ -311,7 +315,7 @@ class PoissonAlgorithmOddsConverter {
         curl_setopt($_a, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($_a, CURLOPT_HTTPGET, 1);
         curl_setopt($_a, CURLOPT_URL, $awayUrl);
-        curl_setopt($_a, CURLOPT_DNS_CACHE_TIMEOUT, 2 );
+        curl_setopt($_a, CURLOPT_DNS_CACHE_TIMEOUT, 2);
 
         $data = curl_exec($_a);
         curl_close($_a);
@@ -327,62 +331,15 @@ class PoissonAlgorithmOddsConverter {
                 return trim($td->text());
             });
         });
+
+        array_shift($table1);
+        array_shift($table2);
         krsort($table1);
         krsort($table2);
 
-        echo '<pre>' . print_r($table2, true);
+        $checks = $this->checkForGoalPrediction(['home' => $table1, 'away' => $table2]);
 
-        $over = false;
-        $countMatches = 3;
-        $score = 0;
-        $validGames = 0;
-        $awayValidGames = 0;
-        $previousGameCheck = false;
-        $previousGame = 1;
-        foreach($table2 as $homeTeamStats) {
-            try {
-                $todayDate = Carbon::today(SoccerwayProcessor::TIMEZONE);
-                $gameDate = Carbon::createFromFormat('d/m/y', $homeTeamStats[1]);
-            } catch(\Exception $ex) {
-                continue;
-            }
-
-            if($gameDate->gt($todayDate)) {
-                continue;
-            }
-
-            if($previousGame == 1) {
-                $previousGameCheck = array_sum(explode('-', $homeTeamStats[4])) >= 2;
-            }
-
-            $previousGame--;
-
-            if($countMatches > 0) {
-                $res = explode('-', $homeTeamStats[4]);
-                $resSum = array_sum($res);
-                if($resSum > 2.5) {
-                    $validGames++;
-                }
-                $score += $resSum;
-
-
-                //additional checks for the away team
-                if($res[1] > 0) {
-                    $awayValidGames++;
-                }
-            }
-            $countMatches--;
-        }
-
-        dd($score >7, $validGames >=2,  $previousGameCheck, $awayValidGames >= 2);
-
-        if ($score > 7 && $validGames >= 2) {
-            $over = true;
-        }
-
-        dd($over);
-
-        if( !$results['homeTeam'] || !$results['awayTeam']) {
+        if (!$results['homeTeam'] || !$results['awayTeam']) {
             return 0;
         }
 
@@ -391,7 +348,7 @@ class PoissonAlgorithmOddsConverter {
 
         $sum = 0;
 
-        foreach($results as $team => $item) {
+        foreach ($results as $team => $item) {
             // 4 is the key for the result
             $matches = array_column($item, 4);
             $lastMatches = array_slice($matches, -5);
@@ -403,8 +360,8 @@ class PoissonAlgorithmOddsConverter {
                     continue;
                 }
 
-                $homeRes = (int) trim($res[0]);
-                $awayRes = (int) trim($res[1]);
+                $homeRes = (int)trim($res[0]);
+                $awayRes = (int)trim($res[1]);
 
                 if ($homeRes + $awayRes > 2.5) {
                     $sum += +0.5;
@@ -422,18 +379,122 @@ class PoissonAlgorithmOddsConverter {
             }
         }
 
-        return $sum;
+        $h2hsum = $this->calculateVincentGoalStrategyH2H($teams);
+
+        if ($checks) {
+
+            if ($checks['homeOver'] && $checks['awayOver'] && $sum > 0 && $h2hsum > 0) {
+                return $sum;
+            } elseif ($checks['homeUnder'] && $checks['awayUnder'] && $sum < 0 && $h2hsum < 0) {
+                return $sum;
+            }
+
+        }
+
+        return 0;
     }
 
+    protected function checkForGoalPrediction($tableStats)
+    {
+        $validations = [];
+
+        if (!$tableStats) {
+            return $validations;
+        }
+
+        if (!$tableStats['home']) {
+            return $validations;
+        }
+
+        if (!$tableStats['away']) {
+            return $validations;
+        }
+
+
+        $haveZeroScore = false;
+
+        foreach ($tableStats as $team => $stats) {
+
+            $countMatches = 3;
+            $score = 0;
+            $validOverGames = 0;
+            $awayValidOverGames = 0;
+            $previousGameCheck = false;
+            $previousGame = 1;
+
+            $validUnderGames = 0;
+            $awayValidUnderGames = 0;
+
+            foreach ($stats as $st) {
+                try {
+                    $todayDate = Carbon::today(SoccerwayProcessor::TIMEZONE);
+                    $gameDate = Carbon::createFromFormat('d/m/y', $st[1]);
+                } catch (\Exception $ex) {
+                    continue;
+                }
+
+                if ($gameDate->gt($todayDate)) {
+                    continue;
+                }
+
+                if ($countMatches > 0) {
+                    $res = explode('-', $st[4]);
+                    $resSum = array_sum($res);
+
+                    if ($resSum > 2.5) {
+                        $validOverGames++;
+                    } else {
+                        $validUnderGames++;
+                    }
+                    $score += $resSum;
+
+                    if ($team === 'home' && $res[0] == 0 || $res[1] == 0) {
+                        $haveZeroScore = true;
+                    }
+
+                    //additional checks for the away team
+                    if ($team === 'away') {
+                        if ($res[1] > 0) {
+                            $awayValidOverGames++;
+                        }
+
+                        if ($res[1] == 0) {
+                            $awayValidUnderGames++;
+                        }
+
+                        if ($previousGame == 1) {
+                            $previousGameCheck = array_sum(explode('-', $st[4])) >= 2;
+                            $previousGame--;
+                        }
+                    }
+
+                    $countMatches--;
+
+                }
+
+            }
+
+            if ($team == 'home') {
+                $validations['homeOver'] = $score > 7 && $validOverGames >= 2;
+                $validations['homeUnder'] = $validUnderGames >= 2 && $haveZeroScore;
+            } else {
+                $validations['awayOver'] = $score > 7 && $validOverGames >= 2 && $previousGameCheck && $awayValidOverGames >= 2;
+                $validations['awayUnder'] = $validUnderGames >= 2 && $awayValidUnderGames >= 1;
+            }
+
+        }
+
+        return $validations;
+    }
 
     protected function correctScorePredictor($fixture1, $fixture2)
     {
         $fixtures = $this->convert($fixture1, $fixture2);
         $fixtureCalc = $fixtures[0] * $fixtures[1];
-        if($fixtureCalc == 0) {
+        if ($fixtureCalc == 0) {
             return;
         }
-        $probability = round((1/(1/$fixtureCalc))*100, 2);
+        $probability = round((1 / (1 / $fixtureCalc)) * 100, 2);
         return [
             'odds' => round((1 / ($fixtureCalc)), 2),
             'percentage' => $probability,
@@ -443,6 +504,6 @@ class PoissonAlgorithmOddsConverter {
 
     protected function convert($f1, $f2)
     {
-        return [$f1/100, $f2/100];
+        return [$f1 / 100, $f2 / 100];
     }
 }
