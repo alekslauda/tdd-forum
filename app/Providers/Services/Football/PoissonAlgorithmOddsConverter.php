@@ -266,8 +266,13 @@ class PoissonAlgorithmOddsConverter
     {
 
         $results = $this->soccerwayProcessor->getTeamsLastMatches($teams);
+
+        if (!$results['homeTeam'] || !$results['awayTeam']) {
+            return 0;
+        }
+
         $competitionId = $this->soccerwayProcessor->getCompetitionId();
-        
+
         $homeUrl = 'https://int.soccerway.com/a/block_match_team_matches?' . http_build_query([
                 'block_id' => 'page_match_1_block_match_team_matches_14',
                 'callback_params' => '{"page":"0","block_service_id":"match_summary_block_matchteammatches","team_id":"'.$results['teamIds'][0].'","competition_id":"'.$competitionId.'","filter":"home","new_design":""}',
@@ -330,10 +335,6 @@ class PoissonAlgorithmOddsConverter
         krsort($table2);
 
         $checks = $this->checkForGoalPrediction(['home' => $table1, 'away' => $table2]);
-
-        if (!$results['homeTeam'] || !$results['awayTeam']) {
-            return 0;
-        }
 
         krsort($results['homeTeam']);
         krsort($results['awayTeam']);
