@@ -213,23 +213,14 @@ class PoissonAlgorithmOddsConverter
 
         GoalsFactory::addPrediction(new Standard(new Prediction($over0and5Prediction, 'Over/Under 0.5', Types::OVER_0_5)));
         GoalsFactory::addPrediction(new Standard(new Prediction($over1and5Prediction, 'Over/Under 1.5', Types::OVER_1_5)));
-        GoalsFactory::addPrediction(new Standard(new Prediction($over2and5Prediction, 'Over/Under 2.5', Types::OVER_2_5)));
+        GoalsFactory::addPrediction(new Standard(new Prediction($over2and5Prediction, 'Over/Under 2.5', Types::OVER_2_5, $this->calculateVincentGoalStrategy([$homeTeam, $awayTeam]))));
         GoalsFactory::addPrediction(new Standard(new Prediction($over3and5Prediction, 'Over/Under 3.5', Types::OVER_3_5)));
         GoalsFactory::addPrediction(new Standard(new Prediction($over4and5Prediction, 'Over/Under 4.5', Types::OVER_4_5)));
         GoalsFactory::addPrediction(new Standard(new Prediction($bothTeamToScorePrediction, 'Both Teams Can Score', Types::BOTH_TEAMS_CAN_SCORE)));
 
-
-        $vincentStrategyPossibility = $this->calculateVincentGoalStrategy([$homeTeam, $awayTeam]);
-
-        $vincent = null;
-        if ($vincentStrategyPossibility != 0) {
-            $vincent = new Vincent2and5Strategy($vincentStrategyPossibility, '', Types::VINCENT_OVER_UNDER_2_5);
-        }
-
         return [
             'Sign' => SignFactory::getAll(),
             'Goals' => GoalsFactory::getAll(),
-            'Vincent' => $vincent ? $vincent : null,
         ];
     }
 
@@ -439,6 +430,9 @@ class PoissonAlgorithmOddsConverter
 
                 if ($countMatches > 0) {
                     $res = explode('-', $st[4]);
+                    if (count($res) !== 2) {
+                        continue;
+                    }
                     $resSum = array_sum($res);
 
                     if ($resSum > 2.5) {

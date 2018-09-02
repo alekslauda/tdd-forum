@@ -11,6 +11,11 @@ class Standard extends BaseAbstract
         return new Opposite($this);
     }
 
+    public function bet()
+    {
+        return $this->prediction->getVincent() > 0;
+    }
+
     public function getOdds()
     {
         return $this->prediction->getOdds();

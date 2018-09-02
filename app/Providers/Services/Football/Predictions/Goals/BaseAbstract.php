@@ -42,4 +42,9 @@ abstract class BaseAbstract implements PredictionInterface
     {
         return $this->prediction->getPercentage();
     }
+
+    function getVincent()
+    {
+        return $this->prediction->getVincent();
+    }
 }

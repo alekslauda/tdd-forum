@@ -38,9 +38,21 @@
             display:none;
         }
 
+        .bet-border {
+            border: 5px solid mediumblue;
+        }
+
         .progress-bar {
             min-width: 35%;
             max-width: 65%;
+        }
+
+        .progress-bar-success {
+            background-color: #205d44;
+        }
+
+        .progress-bar-success2 {
+            background-color: #7adcb8;
         }
 
         .progress-bar-goals {

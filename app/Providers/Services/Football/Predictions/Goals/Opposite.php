@@ -19,4 +19,9 @@ class Opposite extends BaseAbstract
     {
         return new Standard($this);
     }
+
+    public function bet()
+    {
+        return $this->prediction->getVincent() < 0;
+    }
 }

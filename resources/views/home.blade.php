@@ -60,6 +60,15 @@
                                 @php
                                     $pred = 'Over';
                                     $predOpp = 'Under';
+
+                                    $goalStyle = '';
+
+                                    if ( $goalsPrediction->opposite()->bet()) {
+                                        $goalStyle = 'border: 5px solid #7adcb8';
+                                    } elseif ($goalsPrediction->bet()) {
+                                        $goalStyle = 'border: 5px solid #205d44';
+                                    }
+
                                     if ($goalsPrediction->getId() == \App\Providers\Services\Football\Predictions\Types::BOTH_TEAMS_CAN_SCORE) {
                                         $pred = 'Yes';
                                         $predOpp = 'No';
@@ -67,12 +76,12 @@
                                 @endphp
 
                                 <div class="col-md-4">
-                                    <div class="panel panel-default">
+                                    <div class="panel panel-default" style="{{ $goalStyle }}">
                                         <div class="panel-heading text-center">{{ $goalsPrediction->getTitle() }}</div>
                                         <div class="panel-body">
                                             <div class="progress progress-goals">
 
-                                                <div class="progress-bar progress-bar-goals {{ $goalsPrediction->getPercentage() > $goalsPrediction->opposite()->getPercentage() ? 'progress-bar-success' : 'progress-bar-danger' }}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $goalsPrediction->getPercentage() }}%;">
+                                                <div class="progress-bar progress-bar-goals progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $goalsPrediction->getPercentage() }}%;">
                                                     <div class="row">
                                                         <div class="col-md-5"></div>
                                                         <div class="col-md-7">
@@ -85,7 +94,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="progress-bar progress-bar-goals {{ $goalsPrediction->getPercentage() > $goalsPrediction->opposite()->getPercentage() ? 'progress-bar-danger' : 'progress-bar-success' }} " role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $goalsPrediction->opposite()->getPercentage() }}%;">
+                                                <div class="progress-bar progress-bar-goals progress-bar-success2" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $goalsPrediction->opposite()->getPercentage() }}%;">
                                                     <div class="row">
                                                         <div class="col-md-5"></div>
                                                         <div class="col-md-7">
@@ -109,29 +118,6 @@
                             @endforeach
                         </div>
                     </div>
-
-                    @if($v['beatTheBookie']['Vincent'])
-                        <div class="panel panel-info">
-                            <div class="panel-heading">Vincent 2.5 Goals Strategy</div>
-                            <div class="panel-body">
-
-                                <div class="col-md-4">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><strong>{{ $v['beatTheBookie']['Vincent']->getTitle() }}</strong></div>
-                                        <div class="panel-heading">{{ $v['beatTheBookie']['Vincent']->subTitle() }}</div>
-                                        <div class="panel-body">
-                                            <div class="progress">
-                                                <div class="progress-bar " role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ $v['beatTheBookie']['Vincent']->getPercentage() }}%;">
-                                                    {{ $v['beatTheBookie']['Vincent']->getPercentage() }}%
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    @endif
 
                 </div>
             @endforeach

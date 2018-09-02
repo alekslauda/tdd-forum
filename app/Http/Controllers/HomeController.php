@@ -34,7 +34,7 @@ class HomeController extends Controller
             ]);
 
             try {
-                
+
                 $competitionUrl = $request->input('competitions');
                 $soccerwayProcessor = new SoccerwayProcessor($competitionUrl);
                 $poisson = new PoissonAlgorithmOddsConverter($soccerwayProcessor);

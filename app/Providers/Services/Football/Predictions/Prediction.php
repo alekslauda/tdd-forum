@@ -9,17 +9,24 @@ class Prediction implements PredictionInterface
     protected $probability;
     protected $title;
     protected $id;
+    protected $vincent;
 
-    public function __construct($probability, $title, $id)
+    public function __construct($probability, $title, $id, $vincent = 0)
     {
         $this->probability = $probability;
         $this->title = $title;
         $this->id= $id;
+        $this->vincent = $vincent;
     }
 
     public function getTitle()
     {
         return $this->title;
+    }
+
+    public function getVincent()
+    {
+        return $this->vincent;
     }
 
     public function getId()
