@@ -266,17 +266,18 @@ class PoissonAlgorithmOddsConverter
     {
 
         $results = $this->soccerwayProcessor->getTeamsLastMatches($teams);
-
+        $competitionId = $this->soccerwayProcessor->getCompetitionId();
+        
         $homeUrl = 'https://int.soccerway.com/a/block_match_team_matches?' . http_build_query([
                 'block_id' => 'page_match_1_block_match_team_matches_14',
-                'callback_params' => '{"page":"0","block_service_id":"match_summary_block_matchteammatches","team_id":" ' . $results['teamIds'][0] . ' ","competition_id":"0","filter":"home","new_design":""}',
+                'callback_params' => '{"page":"0","block_service_id":"match_summary_block_matchteammatches","team_id":"'.$results['teamIds'][0].'","competition_id":"'.$competitionId.'","filter":"home","new_design":""}',
                 'action' => 'filterMatches',
                 'params' => '{"filter":"home"}'
             ]);
 
         $awayUrl = 'https://int.soccerway.com/a/block_match_team_matches?' . http_build_query([
                 'block_id' => 'page_match_1_block_match_team_matches_14',
-                'callback_params' => '{"page":"0","block_service_id":"match_summary_block_matchteammatches","team_id":" ' . $results['teamIds'][1] . ' ","competition_id":"0","filter":"away","new_design":""}',
+                'callback_params' => '{"page":"0","block_service_id":"match_summary_block_matchteammatches","team_id":"'.$results['teamIds'][1].'","competition_id":"'.$competitionId.'","filter":"away","new_design":""}',
                 'action' => 'filterMatches',
                 'params' => '{"filter":"away"}'
             ]);

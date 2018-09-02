@@ -162,8 +162,17 @@ class SoccerwayProcessor
         return $this->client;
     }
 
+    public function getCompetitionId()
+    {
+        $parts = explode('/', $this->soccerwayCompetitionUrl);
+        $competitionId = str_replace('c', '', $parts[count($parts)-2]);
+
+        return (int) $competitionId;
+    }
+
     protected function buildData()
     {
+
         $crawler = $this->client->request('GET', \Config::get('app.SOCCERWAY_URL') . $this->soccerwayCompetitionUrl);
 
         $this->buildTodayMatches($crawler);

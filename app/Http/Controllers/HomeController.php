@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Providers\Services\Football\CompetitionBuilder;
+use App\Providers\Services\Football\CompetitionNotFound;
 use App\Providers\Services\Football\NoPredictionsWrongFileData;
 use App\Providers\Services\Football\PoissonAlgorithmOddsConverter;
 use App\Providers\Services\Football\Predictions\Factories\GoalsFactory;
