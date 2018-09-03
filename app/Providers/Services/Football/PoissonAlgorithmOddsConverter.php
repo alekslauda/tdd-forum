@@ -335,7 +335,7 @@ class PoissonAlgorithmOddsConverter
         krsort($table2);
 
         $checks = $this->checkForGoalPrediction(['home' => $table1, 'away' => $table2]);
-
+        array_shift($results);
         krsort($results['homeTeam']);
         krsort($results['awayTeam']);
 
@@ -345,6 +345,7 @@ class PoissonAlgorithmOddsConverter
             // 4 is the key for the result
             $matches = array_column($item, 4);
             $lastMatches = array_slice($matches, -5);
+            array_pop($lastMatches);
 
             foreach ($lastMatches as $result) {
                 $res = explode('-', $result);

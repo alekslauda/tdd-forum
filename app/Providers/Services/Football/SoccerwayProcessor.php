@@ -91,7 +91,7 @@ class SoccerwayProcessor
 
         $crawler = $this->client->request('GET', \Config::get('app.SOCCERWAY_URL') . $resultsUrl);
 
-        $teams = $crawler->filter('.matches')->filter('tr')->each(function ($tr, $i) {
+        $teams = $crawler->filter('.table-container .matches')->filter('tr')->each(function ($tr, $i) {
             return $tr->filter('td')->each(function ($td, $i) {
                 return trim($td->text());
             });
@@ -104,7 +104,6 @@ class SoccerwayProcessor
         });
 
         $splicePoints = [];
-
         foreach ($teams as $pos => $team) {
             if( !$team) {
                 $splicePoints[] = $pos;
@@ -272,7 +271,6 @@ class SoccerwayProcessor
             $parsedGameDate = Carbon::parse($gameDate->format('Y-m-d'), static::TIMEZONE);
 
             if ($todayDate->eq($parsedGameDate)) {
-
                 preg_match('/<a\s+(?:[^>]*?\s+)?href="([^"]*)"/', array_column($games, 'html')[self::MORE_INFO], $match);
 
                 $this->matches[$matches[self::EXTRACT_TODAY_HOME_TEAM] . '-' . $matches[self::EXTRACT_TODAY_AWAY_TEAM]] = [
