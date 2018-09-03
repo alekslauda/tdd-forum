@@ -377,7 +377,7 @@ class PoissonAlgorithmOddsConverter
 
         if ($checks) {
 
-            if ($checks['homeOver'] && $checks['awayOver'] && $sum > 0 && $h2hsum > 0) {
+            if ($checks['homeOver'] && $checks['awayOver'] && $sum > 0 ) {
                 return $sum;
             } elseif ($checks['homeUnder'] && $checks['awayUnder'] && $sum < 0 && $h2hsum < 0) {
                 return $sum;
@@ -472,10 +472,10 @@ class PoissonAlgorithmOddsConverter
             }
 
             if ($team == 'home') {
-                $validations['homeOver'] = $score > 7 && $validOverGames >= 2;
+                $validations['homeOver'] = $score >= 7 && $validOverGames >= 2;
                 $validations['homeUnder'] = $validUnderGames >= 2 && $haveZeroScore;
             } else {
-                $validations['awayOver'] = $score > 7 && $validOverGames >= 2 && $previousGameCheck && $awayValidOverGames >= 2;
+                $validations['awayOver'] = $score >= 7 && $validOverGames >= 2 && $previousGameCheck && $awayValidOverGames >= 2;
                 $validations['awayUnder'] = $validUnderGames >= 2 && $awayValidUnderGames >= 1;
             }
 
