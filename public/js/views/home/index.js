@@ -142,6 +142,7 @@ $(document).ready(function () {
     e.preventDefault();
     var form = $('#valueBetCalculatorContainer').find('form');
     var odds = $('#odds').val();
+    var bankroll = $('#bankroll').val() ? $('#bankroll').val() : 100;
     var probability = $('#probability').val().replace('%', '');
     if (!form.hasClass('hidden')) {
       form.addClass('hidden');
@@ -166,6 +167,10 @@ $(document).ready(function () {
       var B = odds - 1;
       var P = probability / 100;
       var Q = 1 - P;
+      var overlay = (P * odds - 1) * 100;
+      var fraction = 10;
+
+      var fractionKelly = bankroll * (fraction / 100) * (overlay / 100 / B);
       var kellyStrategy = (B * P - Q) / B;
       /**
        * END
@@ -176,13 +181,14 @@ $(document).ready(function () {
 
       if (valueBetResult > 0) {
         valueBetClass = 'alert alert-success';
-        message = '<ul class="list-unstyled value-bet-result ' + valueBetClass + '">\n              <li>Value bet:  ' + valueBetResult + '</li>\n              <ul class="list-unstyled">\n                <li>Applying <u>Kelly Critteria</u> bet:  <strong>' + Math.round(kellyStrategy * 100) + '%</strong> of your bank<br/><br/></li>\n                <li class="alert alert-info">Play safe end go for: <strong>' + Math.round(kellyStrategy.toFixed(2) * 100 / 2) + '%</strong> of your bank</li>\n              </ul>\n          </ul>';
+        message = '<ul class="list-unstyled value-bet-result ' + valueBetClass + '">\n              <li>Value bet:  ' + valueBetResult + '</li>\n              <ul class="list-unstyled">\n                <li>Applying <u>Kelly Critteria</u> bet:  <strong>' + Math.round(kellyStrategy * 100) + '%</strong> of your bank<br/><br/></li>\n                <li class="alert alert-info">Play safe end go for: <strong>' + Math.round(kellyStrategy.toFixed(2) * 100 / 2) + '%</strong> of your bank</li>\n                <li class="alert alert-info">With <strong>Kelly Fraction</strong> and <strong>' + bankroll + '$</strong> bankroll: Bet <strong>' + Math.round(fractionKelly) + '</strong>$.</li>\n              </ul>\n          </ul>';
       }
 
       $('#valueBetCalculatorContainer .panel-heading').text('Result');
       $('#calculateValueBets').before('' + message);
     } else {
       form.removeClass('hidden');
+      $('#bankroll').val('');
       $('#odds').val('');
       $('#probability').val('');
       $('#valueBetCalculatorContainer .panel-body').find('.value-bet-result').hide();

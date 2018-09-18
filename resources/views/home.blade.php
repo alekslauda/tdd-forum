@@ -127,6 +127,10 @@
             <div class="panel-body">
                 <form action="" method="POST">
                     <div class="form-group match-input">
+                        <label class="match-input-label" for="bankroll">Your Bankroll</label>
+                        <input type="text" class="form-control" id="bankroll" placeholder="Your Bankroll">
+                    </div>
+                    <div class="form-group match-input">
                         <label class="match-input-label" for="odds">Add Bookamer Odds</label>
                         <input type="text" class="form-control" id="odds" placeholder="Bookmaker Odds">
                     </div>

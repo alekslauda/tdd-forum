@@ -70,6 +70,7 @@ $(document).ready(function(){
       e.preventDefault();
       let form  = $('#valueBetCalculatorContainer').find('form');
       let odds = $('#odds').val();
+      let bankroll =  $('#bankroll').val() ? $('#bankroll').val() : 100;
       let probability = $('#probability').val().replace('%', '');
       if( !form.hasClass('hidden')) {
         form.addClass('hidden');
@@ -94,6 +95,10 @@ $(document).ready(function(){
           let B = odds - 1;
           let P = probability/100;
           let Q = 1 - P;
+          let overlay = ((P * odds) - 1) * 100;
+          let fraction = 10;
+
+          let fractionKelly = (bankroll * (fraction/100)) * ((overlay/100)/(B));
           let kellyStrategy = (B*P - Q) / B;
         /**
          * END
@@ -113,6 +118,7 @@ $(document).ready(function(){
               <ul class="list-unstyled">
                 <li>Applying <u>Kelly Critteria</u> bet:  <strong>${Math.round(kellyStrategy*100)}%</strong> of your bank<br/><br/></li>
                 <li class="alert alert-info">Play safe end go for: <strong>${Math.round(((kellyStrategy.toFixed(2))*100)/2)}%</strong> of your bank</li>
+                <li class="alert alert-info">With <strong>Kelly Fraction</strong> and <strong>${bankroll}$</strong> bankroll: Bet <strong>${Math.round(fractionKelly)}</strong>$.</li>
               </ul>
           </ul>`;
         }
@@ -122,6 +128,7 @@ $(document).ready(function(){
         $('#calculateValueBets').before(`${message}`);
       } else {
         form.removeClass('hidden');
+        $('#bankroll').val('');
         $('#odds').val('');
         $('#probability').val('');
         $('#valueBetCalculatorContainer .panel-body').find('.value-bet-result').hide();
