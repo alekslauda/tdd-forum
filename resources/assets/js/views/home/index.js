@@ -117,7 +117,7 @@ $(document).ready(function(){
               <li>Value bet:  ${valueBetResult}</li>
               <ul class="list-unstyled">
                 <li>Applying <u>Kelly Critteria</u> bet:  <strong>${Math.round(kellyStrategy*100)}%</strong> of your bank<br/><br/></li>
-                <li class="alert alert-info">Play safe end go for: <strong>${Math.round(((kellyStrategy.toFixed(2))*100)/2)}%</strong> of your bank</li>
+                <li class="alert alert-warning">Play safe end go for: <strong>${Math.round(((kellyStrategy.toFixed(2))*100)/2)}%</strong> of your bank</li>
                 <li class="alert alert-info">With <strong>Kelly Fraction</strong> and <strong>${bankroll}$</strong> bankroll: Bet <strong>${Math.round(fractionKelly)}</strong>$.</li>
               </ul>
           </ul>`;

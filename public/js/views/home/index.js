@@ -181,7 +181,7 @@ $(document).ready(function () {
 
       if (valueBetResult > 0) {
         valueBetClass = 'alert alert-success';
-        message = '<ul class="list-unstyled value-bet-result ' + valueBetClass + '">\n              <li>Value bet:  ' + valueBetResult + '</li>\n              <ul class="list-unstyled">\n                <li>Applying <u>Kelly Critteria</u> bet:  <strong>' + Math.round(kellyStrategy * 100) + '%</strong> of your bank<br/><br/></li>\n                <li class="alert alert-info">Play safe end go for: <strong>' + Math.round(kellyStrategy.toFixed(2) * 100 / 2) + '%</strong> of your bank</li>\n                <li class="alert alert-info">With <strong>Kelly Fraction</strong> and <strong>' + bankroll + '$</strong> bankroll: Bet <strong>' + Math.round(fractionKelly) + '</strong>$.</li>\n              </ul>\n          </ul>';
+        message = '<ul class="list-unstyled value-bet-result ' + valueBetClass + '">\n              <li>Value bet:  ' + valueBetResult + '</li>\n              <ul class="list-unstyled">\n                <li>Applying <u>Kelly Critteria</u> bet:  <strong>' + Math.round(kellyStrategy * 100) + '%</strong> of your bank<br/><br/></li>\n                <li class="alert alert-warning">Play safe end go for: <strong>' + Math.round(kellyStrategy.toFixed(2) * 100 / 2) + '%</strong> of your bank</li>\n                <li class="alert alert-info">With <strong>Kelly Fraction</strong> and <strong>' + bankroll + '$</strong> bankroll: Bet <strong>' + Math.round(fractionKelly) + '</strong>$.</li>\n              </ul>\n          </ul>';
       }
 
       $('#valueBetCalculatorContainer .panel-heading').text('Result');
