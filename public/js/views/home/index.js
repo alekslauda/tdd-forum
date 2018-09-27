@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 44);
+/******/ 	return __webpack_require__(__webpack_require__.s = 43);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 44:
+/***/ 43:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(45);
+module.exports = __webpack_require__(44);
 
 
 /***/ }),
 
-/***/ 45:
+/***/ 44:
 /***/ (function(module, exports) {
 
 $(document).ready(function () {
@@ -140,6 +140,7 @@ $(document).ready(function () {
 
   $('.datepicker').datepicker({
     startDate: 'today',
+    setDate: new Date(),
     autoclose: true,
     format: 'dd-mm-yyyy',
     clearBtn: true
@@ -147,7 +148,7 @@ $(document).ready(function () {
     if (date.date) {
       $('input[name="date"]').val($('.datepicker').val());
     }
-  });
+  }).datepicker('setDate', 'now');
 
   $('#calculateValueBets').click(function (e) {
     e.preventDefault();

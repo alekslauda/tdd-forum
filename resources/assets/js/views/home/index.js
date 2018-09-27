@@ -68,6 +68,7 @@ $(document).ready(function(){
 
     $('.datepicker').datepicker({
         startDate: 'today',
+        setDate: new Date(),
         autoclose: true,
         format: 'dd-mm-yyyy',
         clearBtn: true
@@ -75,7 +76,7 @@ $(document).ready(function(){
         if(date.date) {
             $('input[name="date"]').val($('.datepicker').val());
         }
-    })
+    }).datepicker('setDate', 'now')
 
     $('#calculateValueBets').click(function(e){
       e.preventDefault();
