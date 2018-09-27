@@ -11,6 +11,7 @@
     <title>{{ config('app.name', 'Forum') }}</title>
 
     <!-- Styles -->
+    <link href="{{ asset('css/plugins.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <style>

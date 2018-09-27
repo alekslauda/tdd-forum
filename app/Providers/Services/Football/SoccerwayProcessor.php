@@ -35,8 +35,11 @@ class SoccerwayProcessor
 
     protected $client;
 
-    public function __construct($soccerwayCompetitionUrl)
+    protected $predictionsDate;
+
+    public function __construct($soccerwayCompetitionUrl, $predictionsDate)
     {
+        $this->predictionsDate = $predictionsDate;
         $this->soccerwayCompetitionUrl = $soccerwayCompetitionUrl;
         $this->client = new Client();
         $this->setResults();
@@ -254,7 +257,7 @@ class SoccerwayProcessor
 
     protected function buildTodayMatches($crawler)
     {
-        $todayDate = Carbon::today(static::TIMEZONE);
+        $todayDate = Carbon::parse($this->predictionsDate ,static::TIMEZONE);
 
         $table = $crawler->filter('#page_competition_1_block_competition_matches_summary_5')->filter('tr')->each(function ($tr, $i) {
             return $tr->filter('td')->each(function ($td, $i) {

@@ -150,8 +150,13 @@
                     <h1>Check Predictions</h1>
                     <form action="" method="POST">
                         {{ csrf_field() }}
-                        <div class="form-group">
+                        <div class="form-group form-competitions">
                             <a id="loadCountriesWithCompetitions">Load Countries With Competitions</a>
+                        </div>
+                        <div class="form-group form-datepicker" style="display:none">
+                            <label for="datepickera">Choose a Date</label><br>
+                            <input class="datepicker"  id="datepickera" data-date-format="mm/dd/yyyy">
+                            <input type="hidden" name="date">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

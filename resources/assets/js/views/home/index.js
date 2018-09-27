@@ -44,7 +44,6 @@ $(document).ready(function(){
             }
           },
         success: function ( data ) {
-            console.log(data);
           $('.loader').remove();
           if ($('.select-competitions').length) {
             $('.select-competitions').remove();
@@ -62,9 +61,21 @@ $(document).ready(function(){
                 <label for="competitions">Choose a competition</label>
                 ${competitionSelect}
             </div>`);
+            $('.form-datepicker').css('display', 'block');
         }
       });
   })
+
+    $('.datepicker').datepicker({
+        startDate: 'today',
+        autoclose: true,
+        format: 'dd-mm-yyyy',
+        clearBtn: true
+    }).on('changeDate', (date) => {
+        if(date.date) {
+            $('input[name="date"]').val($('.datepicker').val());
+        }
+    })
 
     $('#calculateValueBets').click(function(e){
       e.preventDefault();

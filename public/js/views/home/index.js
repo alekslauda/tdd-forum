@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 43);
+/******/ 	return __webpack_require__(__webpack_require__.s = 44);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 43:
+/***/ 44:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(44);
+module.exports = __webpack_require__(45);
 
 
 /***/ }),
 
-/***/ 44:
+/***/ 45:
 /***/ (function(module, exports) {
 
 $(document).ready(function () {
@@ -119,7 +119,6 @@ $(document).ready(function () {
         }
       },
       success: function success(data) {
-        console.log(data);
         $('.loader').remove();
         if ($('.select-competitions').length) {
           $('.select-competitions').remove();
@@ -134,8 +133,20 @@ $(document).ready(function () {
         competitionSelect += option + '</select>';
 
         $('#countries').parent().after('<div class="form-group select-competitions">\n                <label for="competitions">Choose a competition</label>\n                ' + competitionSelect + '\n            </div>');
+        $('.form-datepicker').css('display', 'block');
       }
     });
+  });
+
+  $('.datepicker').datepicker({
+    startDate: 'today',
+    autoclose: true,
+    format: 'dd-mm-yyyy',
+    clearBtn: true
+  }).on('changeDate', function (date) {
+    if (date.date) {
+      $('input[name="date"]').val($('.datepicker').val());
+    }
   });
 
   $('#calculateValueBets').click(function (e) {

@@ -31,16 +31,16 @@ class HomeController extends Controller
 
         if ($request->isMethod('post')) {
             $this->validate($request, [
-                'competitions' => 'required'
+                'competitions' => 'required',
+                'date' => 'required'
             ]);
 
             try {
-
                 $competitionUrl = $request->input('competitions');
-                $soccerwayProcessor = new SoccerwayProcessor($competitionUrl);
+                $predictionsDate = $request->input('date');
+                $soccerwayProcessor = new SoccerwayProcessor($competitionUrl, $predictionsDate);
                 $poisson = new PoissonAlgorithmOddsConverter($soccerwayProcessor);
                 $data = $poisson->generatePredictions();
-
             } catch (TeamNotFound $tex) {
                 \Log::error('System error: '. $tex->getMessage() . ' | Trace: ' . $tex->getTraceAsString());
                 $error = ValidationException::withMessages([
