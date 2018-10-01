@@ -142,6 +142,7 @@ $(document).ready(function(){
         form.removeClass('hidden');
         $('#bankroll').val('');
         $('#odds').val('');
+        $('.convert-odds').text('')
         $('#probability').val('');
         $('#valueBetCalculatorContainer .panel-body').find('.value-bet-result').hide();
         $('#valueBetCalculatorContainer .panel-heading').text('Calculate Value Bet');
@@ -152,8 +153,10 @@ $(document).ready(function(){
     $('.percentage:not(.vincent)').click(function(e) {
 
         let probability = $(e.target).text().trim();
+        let odds = (1/(probability.replace('%', '')/100)).toFixed(2);
         if( !$('#valueBetCalculatorContainer').find('form').hasClass('hidden')) {
-          $('#probability').val(probability)
+          $('#probability').val(`${probability}`);
+          $('.convert-odds').text(`Odds: ${odds}`);
           $('#odds').focus();
           $([document.documentElement, document.body]).animate({
             scrollTop: $('#odds').offset().top
@@ -162,6 +165,7 @@ $(document).ready(function(){
           $('#valueBetCalculatorContainer').find('form').removeClass('hidden');
           $('#valueBetCalculatorContainer .panel-body').find('.value-bet-result').hide();
           $('#odds').val('');
+          $('.convert-odds').text('');
           $('#odds').focus();
           $('#probability').val(probability);
           $('#valueBetCalculatorContainer .panel-heading').text('Calculate Value Bet');
@@ -185,6 +189,47 @@ $(document).ready(function(){
   });
 
   $('#back-to-top').tooltip('show');
+
+    var typingTimer;
+    var loading;
+    var doneTypingInterval = 2000;  //time in ms, 2 second for example
+    var $input = $('#probability');
+    var i = 0;
+
+    //on keyup, start the countdown
+    $input.on('keyup', function () {
+        if ($input.val())
+            $('.convert-odds').text('');
+        clearTimeout(typingTimer);
+        clearInterval(loading);
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+        loading = setInterval(function(){
+
+                $('.convert-odds').text(`Odds: converting ${Array((++i % 4) + 1).join(".")}`)
+        }, 500)
+    });
+
+    //on keydown, clear the countdown
+    $input.on('keydown', function () {
+        clearTimeout(typingTimer);
+        clearInterval(loading);
+    });
+    //user is "finished typing," do something
+    function doneTyping () {
+        //do something
+        clearInterval(loading);
+        let probability = $input.val().replace('%', '');
+        $('.convert-odds').text('');
+        if(probability) {
+            let odds = (1/(probability/100)).toFixed(2);
+
+            if (! isNaN(odds) || ! Number.isFinite(odds)) {
+                $('.convert-odds').text(`Odds: ${odds}`);
+            }
+        }
+
+    }
+
 
   $(window).scroll(function () {
     if ($(this).scrollTop() > 50) {

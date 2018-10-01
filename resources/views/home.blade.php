@@ -149,16 +149,17 @@
             <div class="panel-body">
                 <form action="" method="POST">
                     <div class="form-group match-input">
-                        <label class="match-input-label" for="bankroll">Your Bankroll</label>
+                        <label class="bankroll-label" for="bankroll">Your Bankroll</label>
                         <input type="text" class="form-control" id="bankroll" placeholder="Your Bankroll">
                     </div>
                     <div class="form-group match-input">
-                        <label class="match-input-label" for="odds">Add Bookamer Odds</label>
+                        <label class="odds-label" for="odds">Add Bookamer Odds</label>
                         <input type="text" class="form-control" id="odds" placeholder="Bookmaker Odds">
                     </div>
                     <div class="form-group match-input">
-                        <label class="match-input-label" for="probability">Add Win Probability</label>
+                        <label class="probability-label" for="probability">Add Win Probability</label>
                         <input type="text" class="form-control" id="probability" placeholder="Probability %">
+                        <span class="convert-odds"></span>
                     </div>
                 </form>
                 <button type="submit" class="btn btn-primary" id="calculateValueBets">Calculate</button>
