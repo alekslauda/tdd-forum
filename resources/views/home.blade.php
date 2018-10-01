@@ -122,27 +122,7 @@
                 </div>
             @endforeach
         </div>
-        <div class="panel panel-primary" id="valueBetCalculatorContainer">
-            <div class="panel-heading">Calculate Value Bet</div>
-            <div class="panel-body">
-                <form action="" method="POST">
-                    <div class="form-group match-input">
-                        <label class="match-input-label" for="bankroll">Your Bankroll</label>
-                        <input type="text" class="form-control" id="bankroll" placeholder="Your Bankroll">
-                    </div>
-                    <div class="form-group match-input">
-                        <label class="match-input-label" for="odds">Add Bookamer Odds</label>
-                        <input type="text" class="form-control" id="odds" placeholder="Bookmaker Odds">
-                    </div>
-                    <div class="form-group match-input">
-                        <label class="match-input-label" for="probability">Add Win Probability</label>
-                        <input type="text" class="form-control" id="probability" placeholder="Probability %">
-                    </div>
-                </form>
-                <button type="submit" class="btn btn-primary" id="calculateValueBets">Calculate</button>
-                <a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" title="Click to return on the top page" data-toggle="tooltip" data-placement="left"><span class="glyphicon glyphicon-chevron-up"></span></a>
-            </div>
-        </div>
+        <a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" title="Click to return on the top page" data-toggle="tooltip" data-placement="left"><span class="glyphicon glyphicon-chevron-up"></span></a>
     </div>
     @else
             <div class="row">
@@ -163,6 +143,28 @@
                 </div>
             </div>
     @endif
+    <div class="row">
+        <div class="panel panel-primary" id="valueBetCalculatorContainer">
+            <div class="panel-heading">Calculate Value Bet</div>
+            <div class="panel-body">
+                <form action="" method="POST">
+                    <div class="form-group match-input">
+                        <label class="match-input-label" for="bankroll">Your Bankroll</label>
+                        <input type="text" class="form-control" id="bankroll" placeholder="Your Bankroll">
+                    </div>
+                    <div class="form-group match-input">
+                        <label class="match-input-label" for="odds">Add Bookamer Odds</label>
+                        <input type="text" class="form-control" id="odds" placeholder="Bookmaker Odds">
+                    </div>
+                    <div class="form-group match-input">
+                        <label class="match-input-label" for="probability">Add Win Probability</label>
+                        <input type="text" class="form-control" id="probability" placeholder="Probability %">
+                    </div>
+                </form>
+                <button type="submit" class="btn btn-primary" id="calculateValueBets">Calculate</button>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 @section('appScripts')
