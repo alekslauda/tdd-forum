@@ -118,6 +118,23 @@
                             @endforeach
                         </div>
                     </div>
+                    <table class="table table-bordered">
+                        <div class="text-center"><h2>Poisson Distribution for {{ $match }}</h2></div>
+                            @foreach(array_merge(['Goals'=>range(0, \App\Providers\Services\Football\SoccerwayProcessor::GOAL_OCCURANCES)], $v['poisson']) as $header => $res)
+                                <tr>
+                                    <th>
+                                        {{ $header }}
+                                    </th>
+                                    @foreach ($res as $team => $data)
+                                        @if($header == 'Goals')
+                                            <th> {{ $data }}</th>
+                                        @else
+                                            <td> {{ $data }}%</td>
+                                        @endif
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                    </table>
 
                 </div>
             @endforeach
