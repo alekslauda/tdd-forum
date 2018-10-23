@@ -140,6 +140,34 @@ class SoccerwayProcessor
         return (int) round(number_format((array_sum(array_column($this->data, 3)) / 2), 1));
     }
 
+    /**
+     * public function getTeamStats2($team, $option)
+        {
+            $teamNames = array_column($this->data, 2);
+            $pos = false;
+            foreach($teamNames as $k => $name) {
+
+            if(mb_substr(mb_strtolower($name), 0, 5) === mb_substr(mb_strtolower($team), 0, 5)) {
+            $pos = $k;
+            }
+
+            }
+
+            if( $pos === false ) {
+            throw new TeamNotFound('Please provide correct data. Team: ' . $team . ' not found.');
+            }
+
+            return (int) $this->data[$pos][$option];
+        }
+     */
+
+    /**
+     * @param $team
+     * @param $option
+     *
+     * @return int
+     * @throws \App\Providers\Services\Football\TeamNotFound
+     */
     public function getTeamStats($team, $option)
     {
         $teamNames = array_column($this->data, 2);
