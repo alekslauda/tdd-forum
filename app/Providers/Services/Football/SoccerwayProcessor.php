@@ -141,27 +141,6 @@ class SoccerwayProcessor
     }
 
     /**
-     * public function getTeamStats2($team, $option)
-        {
-            $teamNames = array_column($this->data, 2);
-            $pos = false;
-            foreach($teamNames as $k => $name) {
-
-            if(mb_substr(mb_strtolower($name), 0, 5) === mb_substr(mb_strtolower($team), 0, 5)) {
-            $pos = $k;
-            }
-
-            }
-
-            if( $pos === false ) {
-            throw new TeamNotFound('Please provide correct data. Team: ' . $team . ' not found.');
-            }
-
-            return (int) $this->data[$pos][$option];
-        }
-     */
-
-    /**
      * @param $team
      * @param $option
      *
@@ -172,24 +151,19 @@ class SoccerwayProcessor
     {
         $teamNames = array_column($this->data, 2);
         $pos = false;
-        $originTeam = $team;
+
         foreach($teamNames as $k => $name) {
 
-            $dots = strpos($name, '…');
-            $removeDotsName = str_replace('…', '', $name);
-
-            if( $dots !== false) {
-                if(mb_substr(mb_strtolower($team), 0, 5) === mb_substr(mb_strtolower($removeDotsName), 0, 5)) {
-                    $team = (mb_substr($team, 0, -(mb_strlen($team)-$dots+1)));
-                }
-            }
-            if($removeDotsName === $team) {
+            $percent = '';
+            similar_text($name, $team, $percent);
+            if($percent > 50) {
                 $pos = $k;
             }
 
         }
+
         if( $pos === false ) {
-            throw new TeamNotFound('Please provide correct data. Team: ' . $originTeam . ' not found.');
+            throw new TeamNotFound('Please provide correct data. Team: ' . $team . ' not found.');
         }
 
         return (int) $this->data[$pos][$option];
