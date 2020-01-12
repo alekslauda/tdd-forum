@@ -11,7 +11,7 @@ class CompetitionBuilder
     public static function build()
     {
         $client = new Client();
-        $crawler = $client->request('GET', \Config::get('app.SOCCERWAY_URL') . 'competitions');
+        $crawler = $client->request('GET', \Config::get('app.SOCCERWAY_URL') . 'competitions/');
 
         $competitions = [];
         $crawler->filter('ul.areas')->each(function($node) use (&$competitions, $client){
